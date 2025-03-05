@@ -6,6 +6,7 @@ Albatross.EFCore.ChangeReporting
 Albatross.EFCore.CodeGen
 Albatross.EFCore.PostgreSQL
 Albatross.EFCore.SqlServer
+Albatross.Testing.EFCore
 
 # Tests
 Albatross.EFCore.Test
