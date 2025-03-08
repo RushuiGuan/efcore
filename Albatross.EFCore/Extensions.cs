@@ -39,7 +39,7 @@ namespace Albatross.EFCore {
 			if (data == null) {
 				return null;
 			} else {
-				return JsonSerializer.Serialize(data, EFCoreJsonOption.DefaultOptions);
+				return JsonSerializer.Serialize(data, EFCoreJsonOption.Instance.Value);
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace Albatross.EFCore {
 				return default;
 			} else {
 				try {
-					return JsonSerializer.Deserialize<T>(text, EFCoreJsonOption.DefaultOptions);
+					return JsonSerializer.Deserialize<T>(text, EFCoreJsonOption.Instance.Value);
 				} catch {
 					return default;
 				}
@@ -56,8 +56,8 @@ namespace Albatross.EFCore {
 		}
 		public static PropertyBuilder<List<TProperty>> HasJsonCollectionProperty<TProperty>(this PropertyBuilder<List<TProperty>> builder) {
 			builder.IsRequired(false).IsUnicode(false).HasConversion(new ValueConverter<List<TProperty>, string?>(
-								args => args.Any() ? JsonSerializer.Serialize(args, EFCoreJsonOption.DefaultOptions) : null,
-								args => string.IsNullOrEmpty(args) ? new List<TProperty>() : JsonSerializer.Deserialize<List<TProperty>>(args, EFCoreJsonOption.DefaultOptions) ?? new List<TProperty>()),
+								args => args.Any() ? JsonSerializer.Serialize(args, EFCoreJsonOption.Instance.Value) : null,
+								args => string.IsNullOrEmpty(args) ? new List<TProperty>() : JsonSerializer.Deserialize<List<TProperty>>(args, EFCoreJsonOption.Instance.Value) ?? new List<TProperty>()),
 								new ValueComparer<List<TProperty>>(
 									(left, right) => left == right || left != null && right != null && left.SequenceEqual(right),
 									obj => obj.Aggregate(0, (a, b) => HashCode.Combine(a, b == null ? 0 : b.GetHashCode())),
