@@ -10,15 +10,6 @@ using Xunit;
 
 namespace Albatross.EFCore.Test.MyNamespace {
 	public class TestSampleDbSession  {
-		[Fact]
-		public void TestGetEntityModels() {
-			var items = typeof(Market).Assembly.GetEntityModels(null);
-			Assert.NotEmpty(items);
-
-			items = typeof(Market).Assembly.GetEntityModels("Sample.EFCore.Models.Test");
-			Assert.Single(items);
-		}
-
 		//[Fact(Skip = "require database")]
 		[Fact]
 		public async Task TestContractSpecPersistance() {

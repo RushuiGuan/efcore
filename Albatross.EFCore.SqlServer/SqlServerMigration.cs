@@ -1,6 +1,6 @@
-﻿using Albatross.Reflection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace Albatross.EFCore.SqlServer {
 		}
 		public async Task ExecuteDeploymentScript(string location = "Scripts") {
 			this.logger.LogInformation("Deploying script via {ConnectionString}", session.DbConnection.ConnectionString);
-			var directoryInfo = typeof(T).Assembly.GetAssemblyDirectoryLocation(location);
+			var directoryInfo = new DirectoryInfo(AppContext.BaseDirectory);
 			if (directoryInfo.Exists) {
 				var files = directoryInfo.GetFiles("*.sql").OrderBy(args => args.Name);
 				foreach (var file in files) {
