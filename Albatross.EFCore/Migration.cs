@@ -19,9 +19,10 @@ namespace Albatross.EFCore {
 			this.logger.LogInformation("Migrating via {ConnectionString}", session.DbConnection.ConnectionString);
 			await session.Database.MigrateAsync();
 		}
-		public virtual async Task ExecuteDeploymentScript(string location = "Scripts") {
+
+		public virtual async Task ExecuteDeploymentScript(string location) {
 			this.logger.LogInformation("Deploying script via {ConnectionString}", session.DbConnection.ConnectionString);
-			var directoryInfo = new DirectoryInfo(AppContext.BaseDirectory);
+			var directoryInfo = new DirectoryInfo(location);
 			if (directoryInfo.Exists) {
 				var files = directoryInfo.GetFiles("*.sql").OrderBy(args => args.Name);
 				foreach (var file in files) {
