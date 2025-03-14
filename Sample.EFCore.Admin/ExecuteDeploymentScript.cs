@@ -1,5 +1,5 @@
 ﻿using Albatross.CommandLine;
-using Albatross.EFCore.SqlServer;
+using Albatross.EFCore;
 using Microsoft.Extensions.Options;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
@@ -12,9 +12,9 @@ namespace Sample.EFCore.Admin {
 	}
 
 	public class ExecuteDeploymentScript : BaseHandler<ExecuteDeploymentScriptOption> {
-		private readonly SqlServerMigration<SampleSqlServerMigration> svc;
+		private readonly Migration<SampleSqlServerMigration> svc;
 
-		public ExecuteDeploymentScript(SqlServerMigration<SampleSqlServerMigration> svc, IOptions<ExecuteDeploymentScriptOption> options) : base(options) {
+		public ExecuteDeploymentScript(Migration<SampleSqlServerMigration> svc, IOptions<ExecuteDeploymentScriptOption> options) : base(options) {
 			this.svc = svc;
 		}
 

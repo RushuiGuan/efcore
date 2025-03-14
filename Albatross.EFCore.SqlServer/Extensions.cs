@@ -30,7 +30,7 @@ namespace Albatross.EFCore.SqlServer {
 
 		public static IServiceCollection AddSqlServer<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<SqlServerDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
 			services.AddDbContext<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder));
-			services.TryAddSingleton<ISqlBatchExecution, SqlBatchExecution>();
+			services.TryAddSingleton<EFCore.ISqlBatchExecution, EFCore.SqlBatchExecution>();
 			return services;
 		}
 
@@ -45,7 +45,7 @@ namespace Albatross.EFCore.SqlServer {
 		/// <returns></returns>
 		public static IServiceCollection AddSqlServerWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<SqlServerDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
 			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder ?? DefaultDbContextOptionBuilder));
-			services.TryAddSingleton<ISqlBatchExecution, SqlBatchExecution>();
+			services.TryAddSingleton<EFCore.ISqlBatchExecution, EFCore.SqlBatchExecution>();
 			return services;
 		}
 	}

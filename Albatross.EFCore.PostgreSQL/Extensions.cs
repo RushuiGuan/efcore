@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using System;
 
@@ -28,11 +29,13 @@ namespace Albatross.EFCore.PostgreSQL {
 
 		public static IServiceCollection AddPostgres<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
 			services.AddDbContext<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder));
+			services.TryAddSingleton<ISqlBatchExecution, SqlBatchExecution>();
 			return services;
 		}
 
 		public static IServiceCollection AddPostgresWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
 			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder ?? DefaultDbContextOptionBuilder));
+			services.TryAddSingleton<ISqlBatchExecution, SqlBatchExecution>();
 			return services;
 		}
 	}

@@ -1,14 +1,17 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Albatross.EFCore.SqlServer {
+	[Obsolete("Use Albatross.EFCore.ISqlBatchExecution instead")]
 	public interface ISqlBatchExecution {
 		Task Execute(IDbConnection dbConnection, System.IO.TextReader reader);
 	}
+	[Obsolete("Use Albatross.EFCore.SqlBatchExecution instead")]
 	public class SqlBatchExecution : ISqlBatchExecution {
 		Regex goRegex = new Regex(@"^\s*go\s*$", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 		private readonly ILogger<SqlBatchExecution> logger;

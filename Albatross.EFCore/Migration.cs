@@ -5,14 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Albatross.EFCore.SqlServer {
-	[Obsolete("Use Albatross.EFCore.Migration<T> instead")]
-	public class SqlServerMigration<T> where T : DbSession {
+namespace Albatross.EFCore {
+	public class Migration<T> where T : DbSession {
 		private readonly ISqlBatchExecution batchExecution;
 		private readonly T session;
-		private readonly ILogger<SqlServerMigration<T>> logger;
+		private readonly ILogger<Migration<T>> logger;
 
-		public SqlServerMigration(ISqlBatchExecution batchExecution, T session, ILogger<SqlServerMigration<T>> logger) {
+		public Migration(ISqlBatchExecution batchExecution, T session, ILogger<Migration<T>> logger) {
 			this.batchExecution = batchExecution;
 			this.session = session;
 			this.logger = logger;
