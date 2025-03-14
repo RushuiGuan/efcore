@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace Albatross.EFCore {
 	public class Migration<T> where T : DbSession {
-		private readonly ISqlBatchExecution batchExecution;
-		private readonly T session;
-		private readonly ILogger<Migration<T>> logger;
+		protected readonly T session;
+		protected readonly ILogger<Migration<T>> logger;
 
-		public Migration(ISqlBatchExecution batchExecution, T session, ILogger<Migration<T>> logger) {
-			this.batchExecution = batchExecution;
+		public Migration(T session, ILogger<Migration<T>> logger) {
 			this.session = session;
 			this.logger = logger;
 		}
@@ -21,7 +19,7 @@ namespace Albatross.EFCore {
 			this.logger.LogInformation("Migrating via {ConnectionString}", session.DbConnection.ConnectionString);
 			await session.Database.MigrateAsync();
 		}
-		public async Task ExecuteDeploymentScript(string location = "Scripts") {
+		public virtual async Task ExecuteDeploymentScript(string location = "Scripts") {
 			this.logger.LogInformation("Deploying script via {ConnectionString}", session.DbConnection.ConnectionString);
 			var directoryInfo = new DirectoryInfo(AppContext.BaseDirectory);
 			if (directoryInfo.Exists) {
@@ -29,10 +27,14 @@ namespace Albatross.EFCore {
 				foreach (var file in files) {
 					logger.LogInformation("Executing deployment script: {name}", file.Name);
 					using (var reader = new StreamReader(file.FullName)) {
-						await batchExecution.Execute(session.DbConnection, reader);
+						await Execute(reader.ReadToEnd());
 					}
 				}
 			}
+		}
+
+		protected virtual async Task Execute(string sql) {
+			await session.DbContext.Database.ExecuteSqlRawAsync(sql);
 		}
 		public async Task<bool> HasPendingMigration() {
 			var pendingMigrations = await session.Database.GetPendingMigrationsAsync();
