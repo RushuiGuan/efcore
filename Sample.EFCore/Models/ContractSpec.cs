@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Sample.EFCore.Models {
 	public class ContractSpec : DateLevelEntity<int> {
 		public int Id { get; set; }
+
 		public ContractSpec(int marketId, DateOnly startDate, decimal value) : base(startDate) {
 			this.MarketId = marketId;
 			this.Value = value;
@@ -14,8 +15,7 @@ namespace Sample.EFCore.Models {
 		public int MarketId { get; set; }
 		public Market Market { get; set; } = default!;
 
-		[Precision(20, 10)]
-		public decimal Value { get; init; }
+		[Precision(20, 10)] public decimal Value { get; init; }
 
 		public override int Key => MarketId;
 
@@ -34,6 +34,7 @@ namespace Sample.EFCore.Models {
 			};
 		}
 	}
+
 	public class ContractSpecEntityMap : EntityMap<ContractSpec> {
 		public override void Map(EntityTypeBuilder<ContractSpec> builder) {
 			base.Map(builder);
@@ -46,6 +47,6 @@ namespace Sample.EFCore.Models {
 	}
 
 	// this should be excluded by codegen
-	public class GenericEntityMap<T> : EntityMap<T> where T:class{
+	public class GenericEntityMap<T> : EntityMap<T> where T : class {
 	}
 }

@@ -32,7 +32,6 @@
 		<ProjectReference Include="..\Albatross.EFCore.PostgreSQL\Albatross.EFCore.PostgreSQL.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.SqlServer\Albatross.EFCore.SqlServer.csproj" />
 		<ProjectReference Include="..\Albatross.Testing.EFCore\Albatross.Testing.EFCore.csproj" />
-		<ProjectReference Include="..\Sample.EFCore\Sample.EFCore.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="appsettings.json">

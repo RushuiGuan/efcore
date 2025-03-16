@@ -6,6 +6,7 @@ namespace Sample.EFCore {
 		public SampleConfig(IConfiguration configuration) : base(configuration) {
 			this.ConnectionString = configuration.GetRequiredConnectionString("sample");
 		}
-		public string ConnectionString { get; set; }
+
+		public string ConnectionString { get;  }
 	}
 }
