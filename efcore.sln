@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Postgres", "Sample.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Models", "Sample.Models\Sample.Models.csproj", "{9693E129-1313-486C-9795-E896C6B0F22B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Albatross.EFCore.Admin", "Albatross.EFCore.Admin\Albatross.EFCore.Admin.csproj", "{C127842B-E105-40E2-BF3E-46DFDD7696D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{9693E129-1313-486C-9795-E896C6B0F22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9693E129-1313-486C-9795-E896C6B0F22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9693E129-1313-486C-9795-E896C6B0F22B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C127842B-E105-40E2-BF3E-46DFDD7696D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C127842B-E105-40E2-BF3E-46DFDD7696D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C127842B-E105-40E2-BF3E-46DFDD7696D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C127842B-E105-40E2-BF3E-46DFDD7696D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

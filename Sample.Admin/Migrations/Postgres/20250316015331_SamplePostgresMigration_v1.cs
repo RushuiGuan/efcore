@@ -20,15 +20,15 @@ namespace Sample.Admin.Migrations.Postgres
                 schema: "sam",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(128)", unicode: false, maxLength: 128, nullable: false),
-                    CreatedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Property = table.Column<string>(type: "text", unicode: false, nullable: true)
+                    name = table.Column<string>(type: "character varying(128)", unicode: false, maxLength: 128, nullable: false),
+                    createdutc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    property = table.Column<string>(type: "text", unicode: false, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Contact", x => x.Id);
+                    table.PrimaryKey("pk_contact", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,32 +36,32 @@ namespace Sample.Admin.Migrations.Postgres
                 schema: "sam",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Line1 = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
-                    Line2 = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
-                    City = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
-                    State = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
-                    PostalCode = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
-                    ContactId = table.Column<int>(type: "integer", nullable: false)
+                    line1 = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
+                    line2 = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
+                    city = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
+                    state = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
+                    postalcode = table.Column<string>(type: "character varying(512)", unicode: false, maxLength: 512, nullable: true),
+                    contactid = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Address", x => x.Id);
+                    table.PrimaryKey("pk_address", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Address_Contact_ContactId",
-                        column: x => x.ContactId,
+                        name: "fk_address_contact_contactid",
+                        column: x => x.contactid,
                         principalSchema: "sam",
                         principalTable: "Contact",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Address_ContactId",
+                name: "ix_address_contactid",
                 schema: "sam",
                 table: "Address",
-                column: "ContactId");
+                column: "contactid");
         }
 
         /// <inheritdoc />

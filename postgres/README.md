@@ -1,6 +1,5 @@
 # About
-Postgres docker compose file with pgadmin4 setup
+Postgres docker compose file
 
 # Required Environment Variables
-POSTGRES_PASSWORD - postgres admin user password
-PGADMIN_DEFAULT_PASSWORD - pgadmin default user password
+POSTGRES_ADMIN_PASSWORD - postgres admin user password

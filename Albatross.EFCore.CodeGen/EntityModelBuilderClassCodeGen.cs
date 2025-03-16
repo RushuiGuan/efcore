@@ -30,6 +30,7 @@ namespace Albatross.EFCore.CodeGen {
 						dbSessionNamespace = walker.DbSessionClass?.ContainingNamespace.ToDisplayString();
 					}
 				}
+
 				if (!entityModelBuilderClasses.Any()) {
 					return;
 				} else {
@@ -53,15 +54,17 @@ namespace Albatross.EFCore.CodeGen {
 										codeStack.Complete(new NewObjectBuilder(setup.GetFullName()))
 											.With(new IdentifierNode("Build"))
 											.ToNewBegin(new InvocationExpressionBuilder())
-												.With(new ArgumentListBuilder().Build([new IdentifierNode("modelBuilder").Node]))
+											.With(new ArgumentListBuilder().Build([new IdentifierNode("modelBuilder").Node]))
 											.End();
 									}
 								}
+
 								codeStack.With(SyntaxFactory.ReturnStatement(new IdentifierNode("modelBuilder").Identifier));
 							}
 						}
 					}
 				}
+
 				var code = codeStack.Build();
 				context.AddSource(Shared.Class.CodeGenExtensions, SourceText.From(code, Encoding.UTF8));
 				writer.WriteSourceHeader(Shared.Class.CodeGenExtensions);
@@ -70,12 +73,15 @@ namespace Albatross.EFCore.CodeGen {
 				writer.WriteLine(err.ToString());
 				context.CodeGenDiagnostic(DiagnosticSeverity.Error, $"{My.Diagnostic.IdPrefix}2", err.BuildCodeGeneneratorErrorMessage("commandline"));
 			} finally {
-				var text = writer.ToString();
-				if (!string.IsNullOrEmpty(text)) {
-					context.CreateGeneratorDebugFile("albatross-efcore-codegen.debug.txt", text);
+				if(context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.EmitAlbatrossCodeGenDebugFile", out var value)) {
+					if(bool.TryParse(value, out var emitDebugFile) && emitDebugFile) {
+						var text = writer.ToString();
+						context.CreateGeneratorDebugFile("albatross-efcore-codegen.debug.txt", text);
+					}
 				}
 			}
 		}
+
 		public void Initialize(GeneratorInitializationContext context) { }
 	}
 }

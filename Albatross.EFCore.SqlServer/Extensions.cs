@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
 namespace Albatross.EFCore.SqlServer {
@@ -9,15 +8,15 @@ namespace Albatross.EFCore.SqlServer {
 		public static void DefaultDbContextOptionBuilder(SqlServerDbContextOptionsBuilder builder) {
 			builder.CommandTimeout(100);
 		}
-		public static void BuildDefaultOption(this DbContextOptionsBuilder builder, string connectionString, Action<SqlServerDbContextOptionsBuilder>? dbcontextOptionBuilder = null) {
+		public static void BuildDefaultOption(this DbContextOptionsBuilder builder, string connectionString, Action<SqlServerDbContextOptionsBuilder>? sqlserverDbcontextOptionBuilder = null) {
 			builder.EnableDetailedErrors(true);
 			builder.EnableSensitiveDataLogging(true);
 			builder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
-			builder.UseSqlServer(connectionString, dbcontextOptionBuilder ?? DefaultDbContextOptionBuilder);
+			builder.UseSqlServer(connectionString, sqlserverDbcontextOptionBuilder ?? DefaultDbContextOptionBuilder);
 		}
 
 		public static DbContextOptions<T> BuildMigrationOption<T>(string historyTableSchema, string connectionString = DbSession.Any) where T : DbContext {
-			DbContextOptionsBuilder<T> builder = new DbContextOptionsBuilder<T>();
+			var builder = new DbContextOptionsBuilder<T>();
 			builder.EnableDetailedErrors(true);
 			builder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
 			builder.UseSqlServer(connectionString, opt => {
@@ -29,7 +28,6 @@ namespace Albatross.EFCore.SqlServer {
 
 		public static IServiceCollection AddSqlServer<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<SqlServerDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
 			services.AddDbContext<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder));
-			services.TryAddSingleton<ISqlBatchExecution, SqlBatchExecution>();
 			return services;
 		}
 
@@ -44,7 +42,6 @@ namespace Albatross.EFCore.SqlServer {
 		/// <returns></returns>
 		public static IServiceCollection AddSqlServerWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<SqlServerDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
 			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder ?? DefaultDbContextOptionBuilder));
-			services.TryAddSingleton<ISqlBatchExecution, SqlBatchExecution>();
 			return services;
 		}
 	}

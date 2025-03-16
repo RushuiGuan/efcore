@@ -2,14 +2,14 @@ param(
 	[Parameter(Position=0)]
 	[string]$project,
 	[switch]
-	[bool]$alias
+	[bool]$skip
 )
 $InformationPreference = "Continue";
 $install = $env:InstallDirectory;
 
-if(-not $alias) {
+if(-not $skip) {
 	$projects = @(
-		"Sample.EFCore.Admin"
+		"Sample.Admin"
 	);
 
 	if(-not [string]::IsNullOrEmpty($project)){
@@ -30,4 +30,4 @@ if(-not $alias) {
 	}
 }
 
-set-alias -name sample-efcore-admin -Value $env:InstallDirectory\Sample.EFCore.Admin\Sample.EFCore.Admin.exe
+set-alias -name sample -Value $env:InstallDirectory\Sample.Admin\Sample.Admin.exe

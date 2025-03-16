@@ -1,16 +1,15 @@
 ﻿using Albatross.CommandLine;
 using Albatross.EFCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Sample.Models;
 using System.Collections.Generic;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Sample.Admin {
-	[Verb("create-sql-script", typeof(GenerateSqlScript), Description = "Generate sql script for database")]
-	public class GenerateSqlScriptOption {
+namespace Albatross.EFCore.Admin {
+	public class GenerateSqlScriptOptions {
 		[Option("o", "--output-file", Description = "Set the output file")]
 		public string? Out { get; set; }
 
@@ -18,15 +17,15 @@ namespace Sample.Admin {
 		public string? DropScript { get; set; }
 	}
 
-	public class GenerateSqlScript : BaseHandler<GenerateSqlScriptOption> {
-		private readonly SampleDbSession dbSession;
+	public class GenerateSqlScript<T> : BaseHandler<GenerateSqlScriptOptions> where T:IDbSession{
+		private readonly T session;
 
-		public GenerateSqlScript(SampleDbSession dbSession, IOptions<GenerateSqlScriptOption> options) : base(options) {
-			this.dbSession = dbSession;
+		public GenerateSqlScript(T session, IOptions<GenerateSqlScriptOptions> options) : base(options) {
+			this.session = session;
 		}
 		public override Task<int> InvokeAsync(InvocationContext context) {
-			string script = dbSession.GetCreateScript();
-			using (StringReader reader = new StringReader(script)) {
+			string script = session.GetCreateScript();
+			using (var reader = new StringReader(script)) {
 				string content = reader.ReadToEnd();
 				this.writer.WriteLine(content);
 				if (!string.IsNullOrEmpty(options.Out)) {
@@ -50,14 +49,15 @@ namespace Sample.Admin {
 				}
 
 				using (var writer = new StreamWriter(options.DropScript)) {
+					var schema = session.DbContext.Model.GetDefaultSchema() ?? "dbo";
 					tables.Reverse();
 					foreach (var table in tables) {
-						if (table.StartsWith($"[{My.Schema.Sample}]")) {
+						if (table.StartsWith($"[{schema}]")) {
 							writer.Write("drop table ");
 							writer.WriteLine(table);
 						}
 					}
-					writer.WriteLine($"drop table [{My.Schema.Sample}].[__EFMigrationsHistory]");
+					writer.WriteLine($"drop table [{schema}].[__EFMigrationsHistory]");
 				}
 			}
 			return Task.FromResult(0);

@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <EmitAlbatrossCodeGenDebugFile>true</EmitAlbatrossCodeGenDebugFile>
     </PropertyGroup>
-
     <ItemGroup>
+        <CompilerVisibleProperty Include="EmitAlbatrossCodeGenDebugFile" />
         <ProjectReference Include="..\Albatross.EFCore\Albatross.EFCore.csproj"/>
         <ProjectReference Include="..\Albatross.EFCore.CodeGen\Albatross.EFCore.CodeGen.csproj">
             <PrivateAssets>all</PrivateAssets>

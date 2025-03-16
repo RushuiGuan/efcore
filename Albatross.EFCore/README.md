@@ -1,2 +1,4 @@
-# Albatross.EFCore
-Albatross.EFCore assembly contains interfaces and convenient classes that allow users to get EFCore up and running quickly.
+# About
+An library that help setup efcore for sql server and postgres databases.
+
+# Quick Start

@@ -12,8 +12,8 @@ using Sample.Admin;
 namespace Sample.Admin.Migrations.Postgres
 {
     [DbContext(typeof(SamplePostgresMigration))]
-    [Migration("20250315213513_SamplePostgresMigration_v3")]
-    partial class SamplePostgresMigration_v3
+    [Migration("20250316015331_SamplePostgresMigration_v1")]
+    partial class SamplePostgresMigration_v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,41 +30,50 @@ namespace Sample.Admin.Migrations.Postgres
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("city");
 
                     b.Property<int>("ContactId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("contactid");
 
                     b.Property<string>("Line1")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("line1");
 
                     b.Property<string>("Line2")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("line2");
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("postalcode");
 
                     b.Property<string>("State")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("state");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_address");
 
-                    b.HasIndex("ContactId");
+                    b.HasIndex("ContactId")
+                        .HasDatabaseName("ix_address_contactid");
 
                     b.ToTable("Address", "sam");
                 });
@@ -73,24 +82,29 @@ namespace Sample.Admin.Migrations.Postgres
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedUtc")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdutc");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
 
                     b.Property<string>("Property")
                         .IsUnicode(false)
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("property");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_contact");
 
                     b.ToTable("Contact", "sam");
                 });
@@ -101,7 +115,8 @@ namespace Sample.Admin.Migrations.Postgres
                         .WithMany("Addresses")
                         .HasForeignKey("ContactId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_address_contact_contactid");
 
                     b.Navigation("Contact");
                 });

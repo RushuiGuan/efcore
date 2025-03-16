@@ -15,12 +15,12 @@ dotnet ef migrations add SamplePostgresMigration_$name --context SamplePostgresM
 dotnet run -- postgres exec-script $PSScriptRoot\PreMigrationScripts;
 
 "Migrate";
-dotnet run -- postgres ef-migrate
+dotnet run --no-build -- postgres ef-migrate
 
 "PostMigrationScripts";
-dotnet run -- postgres exec-script $PSScriptRoot\Scripts
+dotnet run --no-build -- postgres exec-script $PSScriptRoot\Scripts
 
 "Generate scripts"
-dotnet run -- create-sql-script --output-file $PSScriptRoot\db\tables.sql --drop-script $PSScriptRoot\db\drop.sql
+dotnet run --no-build -- postgres create-script --output-file $PSScriptRoot\db\tables.sql --drop-script $PSScriptRoot\db\drop.sql
 
 Set-Location $location;

@@ -15,12 +15,12 @@ dotnet ef migrations add SampleSqlServerMigration_$name --context SampleSqlServe
 dotnet run -- sql exec-script $PSScriptRoot\PreMigrationScripts;
 
 "Migrate";
-dotnet run -- sql ef-migrate
+dotnet run --no-build -- sql ef-migrate
 
 "PostMigrationScripts";
-dotnet run -- sql exec-script $PSScriptRoot\Scripts
+dotnet run --no-build -- sql exec-script $PSScriptRoot\Scripts
 
 "Generate scripts"
-dotnet run create-sql-script --output-file $PSScriptRoot\db\tables.sql --drop-script $PSScriptRoot\db\drop.sql
+dotnet run --no-build -- sql create-script --output-file $PSScriptRoot\db\tables.sql --drop-script $PSScriptRoot\db\drop.sql
 
 Set-Location $location;

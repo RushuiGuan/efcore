@@ -1,5 +1,6 @@
 # Packages
 Albatross.EFCore
+Albatross.EFCore.Admin
 Albatross.EFCore.Audit
 Albatross.EFCore.AutoCacheEviction
 Albatross.EFCore.ChangeReporting
