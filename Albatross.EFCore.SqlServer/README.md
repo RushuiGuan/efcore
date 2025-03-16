@@ -1,1 +1,2 @@
-Albatross.EFCore.SqlServer contains SqlServer Setup for Albatross.EFCore
+# About
+A library that setup EFCore for sql server

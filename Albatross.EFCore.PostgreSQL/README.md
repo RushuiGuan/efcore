@@ -1,1 +1,2 @@
-Albatross.EFCore.PostgreSQL contains PostgresSQL Setup for Albatross.EFCore
+# About
+A library that setup efcore for Postgres
