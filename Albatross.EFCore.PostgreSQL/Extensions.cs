@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using System;
-using System.Net.NetworkInformation;
 
 namespace Albatross.EFCore.PostgreSQL {
 	public static class Extensions {

@@ -12,9 +12,15 @@ namespace Albatross.EFCore.Admin {
 		}
 
 		public async Task ExecuteAsync(DbContext context, string filename) {
-			logger.LogInformation("Executing migration script: {name}", filename);
-			var script = await File.ReadAllTextAsync(filename);
-			await context.Database.ExecuteSqlRawAsync(script);
+			var fileInfo = new FileInfo(filename);
+			if (fileInfo.Exists) {
+				logger.LogInformation("Executing migration script: {name}", fileInfo.Name);
+				var reader = fileInfo.OpenText();
+				var script = await reader.ReadToEndAsync();
+				if(!string.IsNullOrEmpty(script)) {
+					await context.Database.ExecuteSqlRawAsync(script);
+				}
+			}
 		}
 	}
 }

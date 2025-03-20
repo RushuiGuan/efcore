@@ -48,8 +48,14 @@ namespace Albatross.EFCore.Admin {
 				return 0;
 			} else {
 				var directory = FindTargetVersionScriptLocation(options.Directory);
-				logger.LogInformation("Executing deployment script at {location}", directory);
-				await this.executeScriptFile.ExecuteAsync(this.session.DbContext, directory);
+				logger.LogInformation("Executing deployment scripts at {location}", directory);
+				var info = new DirectoryInfo(directory);
+				if (info.Exists) {
+					foreach (var file in info.GetFiles("*.sql", SearchOption.TopDirectoryOnly)) {
+						await this.executeScriptFile.ExecuteAsync(this.session.DbContext, file.FullName);
+					}
+				}
+
 				return 0;
 			}
 		}
