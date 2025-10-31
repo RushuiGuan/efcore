@@ -2,18 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sample.Admin;
 
 #nullable disable
 
-namespace Sample.Admin.Migrations.Postgres
+namespace Sample.Admin.Migrations.SqlServer
 {
-    [DbContext(typeof(SamplePostgresMigration))]
-    [Migration("20250316015331_SamplePostgresMigration_v1")]
-    partial class SamplePostgresMigration_v1
+    [DbContext(typeof(SampleSqlServerMigration))]
+    [Migration("20251031211251_SampleSqlServerMigration_v2")]
+    partial class SampleSqlServerMigration_v2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,59 +21,50 @@ namespace Sample.Admin.Migrations.Postgres
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("sam")
-                .HasAnnotation("ProductVersion", "8.0.14")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "8.0.21")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Sample.Models.Address", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("city");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<int>("ContactId")
-                        .HasColumnType("integer")
-                        .HasColumnName("contactid");
+                        .HasColumnType("int");
 
                     b.Property<string>("Line1")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("line1");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("Line2")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("line2");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("postalcode");
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("State")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("state");
+                        .HasColumnType("varchar(512)");
 
-                    b.HasKey("Id")
-                        .HasName("pk_address");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ContactId")
-                        .HasDatabaseName("ix_address_contactid");
+                    b.HasIndex("ContactId");
 
                     b.ToTable("Address", "sam");
                 });
@@ -82,29 +73,37 @@ namespace Sample.Admin.Migrations.Postgres
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<DateTime>("CreatedUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("createdutc");
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime>("ModifiedUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(128)")
-                        .HasColumnName("name");
+                        .HasColumnType("varchar(128)");
 
                     b.Property<string>("Property")
                         .IsUnicode(false)
-                        .HasColumnType("text")
-                        .HasColumnName("property");
+                        .HasColumnType("varchar(max)");
 
-                    b.HasKey("Id")
-                        .HasName("pk_contact");
+                    b.HasKey("Id");
 
                     b.ToTable("Contact", "sam");
                 });
@@ -115,8 +114,7 @@ namespace Sample.Admin.Migrations.Postgres
                         .WithMany("Addresses")
                         .HasForeignKey("ContactId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_address_contact_contactid");
+                        .IsRequired();
 
                     b.Navigation("Contact");
                 });

@@ -1,9 +1,8 @@
 ﻿using Albatross.Config;
 using Albatross.EFCore.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
-using Sample.Models;
 
-namespace Sample.SqlServer;
+namespace Sample.Models.SqlServer;
 
 public static class Extensions {
 	public static IServiceCollection AddSqlServerSampleDbSession(this IServiceCollection services) {

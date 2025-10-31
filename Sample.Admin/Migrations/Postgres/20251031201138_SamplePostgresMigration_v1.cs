@@ -16,7 +16,7 @@ namespace Sample.Admin.Migrations.Postgres
                 name: "sam");
 
             migrationBuilder.CreateTable(
-                name: "Contact",
+                name: "contact",
                 schema: "sam",
                 columns: table => new
                 {
@@ -32,7 +32,7 @@ namespace Sample.Admin.Migrations.Postgres
                 });
 
             migrationBuilder.CreateTable(
-                name: "Address",
+                name: "address",
                 schema: "sam",
                 columns: table => new
                 {
@@ -52,7 +52,7 @@ namespace Sample.Admin.Migrations.Postgres
                         name: "fk_address_contact_contactid",
                         column: x => x.contactid,
                         principalSchema: "sam",
-                        principalTable: "Contact",
+                        principalTable: "contact",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -60,7 +60,7 @@ namespace Sample.Admin.Migrations.Postgres
             migrationBuilder.CreateIndex(
                 name: "ix_address_contactid",
                 schema: "sam",
-                table: "Address",
+                table: "address",
                 column: "contactid");
         }
 
@@ -68,11 +68,11 @@ namespace Sample.Admin.Migrations.Postgres
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Address",
+                name: "address",
                 schema: "sam");
 
             migrationBuilder.DropTable(
-                name: "Contact",
+                name: "contact",
                 schema: "sam");
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Albatross.Text;
+using Albatross.Text.Table;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace Albatross.EFCore.ChangeReporting {
 					nameof(ChangeReport<object>.OldValue),
 					nameof(ChangeReport<object>.NewValue)
 			}).ToArray();
+			var tableOptions = new TableOptions<ChangeReport<T>>();
 			var option = new PrintTableOption {
 				Properties = columns,
 				GetColumnHeader = args => (args.StartsWith(ColumnPrefix) ? args.Substring(ColumnPrefix.Length) : args).Replace(".", ""),

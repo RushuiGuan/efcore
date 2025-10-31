@@ -3,10 +3,10 @@ using Sql = Albatross.EFCore.SqlServer;
 
 
 namespace Sample.Admin {
-	public class SampleSqlMigration : SampleDbSession {
+	public class SampleSqlServerMigration : SampleDbSession {
 		// need this constructor for the ef migration tool
-		public SampleSqlMigration() : this("any") { }
-		public SampleSqlMigration(string connectionString)
+		public SampleSqlServerMigration() : this("any") { }
+		public SampleSqlServerMigration(string connectionString)
 			: base(Sql.Extensions.BuildMigrationOption<SampleDbSession>(My.Schema.Sample, connectionString)) {
 		}
 	}

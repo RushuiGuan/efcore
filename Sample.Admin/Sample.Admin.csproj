@@ -2,24 +2,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.CommandLine" Version="7.8.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.14">
+		<PackageReference Include="Albatross.Authentication.Windows" Version="9.0.1" />
+		<PackageReference Include="Albatross.CommandLine" Version="8.0.0" />
+		<PackageReference Include="Albatross.Reflection" Version="8.0.5-41.main" />
+		<PackageReference Include="Albatross.Text.CliFormat" Version="8.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.21" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.21">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.21" />
 		<ProjectReference Include="..\Albatross.EFCore.Admin\Albatross.EFCore.Admin.csproj" />
-		<ProjectReference Include="..\Sample.Postgres\Sample.Postgres.csproj" />
-		<ProjectReference Include="..\Sample.SqlServer\Sample.SqlServer.csproj" />
+		<ProjectReference Include="..\Sample.Models\Sample.Models.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="db\postgres\" />
+	  <Folder Include="db\sqlserver\" />
 	</ItemGroup>
 </Project>

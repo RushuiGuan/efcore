@@ -8,6 +8,11 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<CompilerVisibleProperty Include="EmitAlbatrossCodeGenDebugFile" />
+		<PackageReference Include="Albatross.Config" Version="9.0.2" />
+		<PackageReference Include="Albatross.Text" Version="8.2.0" />
+		<ProjectReference Include="..\Albatross.EFCore.Audit\Albatross.EFCore.Audit.csproj" />
+		<ProjectReference Include="..\Albatross.EFCore.PostgreSQL\Albatross.EFCore.PostgreSQL.csproj" />
+		<ProjectReference Include="..\Albatross.EFCore.SqlServer\Albatross.EFCore.SqlServer.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore\Albatross.EFCore.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.CodeGen\Albatross.EFCore.CodeGen.csproj">
 			<PrivateAssets>all</PrivateAssets>

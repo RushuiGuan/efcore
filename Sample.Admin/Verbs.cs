@@ -7,6 +7,6 @@ using Sample.Admin;
 [assembly: Verb("postgres ef-migrate", typeof(EFMigrate<SamplePostgresMigration>), OptionsClass = typeof(EFMigrationOptions), Description = "Migrate postgres database using dotnet ef tool")]
 	
 	
-[assembly: Verb("sql exec-script", typeof(ExecuteDeploymentScripts<SampleSqlMigration>), OptionsClass = typeof(ExecuteDeploymentScriptsOptions), Description = "Execute sql server deployment scripts")]
-[assembly: Verb("sql create-script", typeof(GenerateSqlScript<SampleSqlMigration>), OptionsClass = typeof(GenerateSqlScriptOptions), Description = "Generate sql script for sql server")]
-[assembly: Verb("sql ef-migrate", typeof(EFMigrate<SampleSqlMigration>), OptionsClass = typeof(EFMigrationOptions), Description = "Migrate sql server database using dotnet ef tool")]
+[assembly: Verb("sqlserver exec-script", typeof(ExecuteDeploymentScripts<SampleSqlServerMigration>), OptionsClass = typeof(ExecuteDeploymentScriptsOptions), Description = "Execute sql server deployment scripts")]
+[assembly: Verb("sqlserver create-script", typeof(GenerateSqlScript<SampleSqlServerMigration>), OptionsClass = typeof(GenerateSqlScriptOptions), Description = "Generate sql script for sql server")]
+[assembly: Verb("sqlserver ef-migrate", typeof(EFMigrate<SampleSqlServerMigration>), OptionsClass = typeof(EFMigrationOptions), Description = "Migrate sql server database using dotnet ef tool")]

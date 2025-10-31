@@ -12,16 +12,16 @@
 		<EmbeddedResource Include="TestCases\data.json" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Caching.MemCache" Version="7.5.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.14">
+		<PackageReference Include="Albatross.Caching.MemCache" Version="7.5.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.21" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.21">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.14" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.21" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

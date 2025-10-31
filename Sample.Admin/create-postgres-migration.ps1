@@ -9,7 +9,7 @@ if(test-Path $PSScriptRoot\Migrations){
 
 $name = "v$count";
 "Creating migration $name";
-dotnet ef migrations add SamplePostgresMigration_$name --context SamplePostgresMigration --output-dir (Get-Path Migrations, Postgres)
+dotnet ef migrations add SamplePostgresMigration_$name --context SamplePostgresMigration --output-dir (Join Migrations, Postgres)
 
 "PreMigrationScripts";
 dotnet run -- postgres exec-script $PSScriptRoot\PreMigrationScripts;
@@ -22,5 +22,6 @@ dotnet run --no-build -- postgres exec-script $PSScriptRoot\Scripts
 
 "Generate scripts"
 dotnet run --no-build -- postgres create-script --output-file $PSScriptRoot\db\tables.sql --drop-script $PSScriptRoot\db\drop.sql
+dotnet run --no-build -- postgres create-script --output-file (Join $PSScriptRoot, "db", "postgres", "tables.sql") --drop-script (Join $PSScriptRoot, "db", "postgres", "drop.sql")
 
 Set-Location $location;

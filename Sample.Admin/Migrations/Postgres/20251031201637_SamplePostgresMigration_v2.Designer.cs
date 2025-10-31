@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sample.Admin;
@@ -11,9 +12,11 @@ using Sample.Admin;
 namespace Sample.Admin.Migrations.Postgres
 {
     [DbContext(typeof(SamplePostgresMigration))]
-    partial class SamplePostgresMigrationModelSnapshot : ModelSnapshot
+    [Migration("20251031201637_SamplePostgresMigration_v2")]
+    partial class SamplePostgresMigration_v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,25 +87,9 @@ namespace Sample.Admin.Migrations.Postgres
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("text")
-                        .HasColumnName("createdby");
-
                     b.Property<DateTime>("CreatedUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("createdutc");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("text")
-                        .HasColumnName("modifiedby");
-
-                    b.Property<DateTime>("ModifiedUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("modifiedutc");
 
                     b.Property<string>("Name")
                         .IsRequired()

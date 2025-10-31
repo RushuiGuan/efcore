@@ -1,4 +1,4 @@
-# Packages
+# packages
 Albatross.EFCore
 Albatross.EFCore.Admin
 Albatross.EFCore.Audit
@@ -9,5 +9,8 @@ Albatross.EFCore.PostgreSQL
 Albatross.EFCore.SqlServer
 Albatross.Testing.EFCore
 
-# Tests
+# tests
 Albatross.EFCore.Test
+
+# apps
+Sample.Admin

@@ -9,18 +9,18 @@ if(test-Path $PSScriptRoot\Migrations){
 
 $name = "v$count";
 "Creating migration $name";
-dotnet ef migrations add SampleSqlServerMigration_$name --context SampleSqlServerMigration --output-dir (Get-Path Migrations, SqlServer)
+dotnet ef migrations add SampleSqlServerMigration_$name --context SampleSqlServerMigration --output-dir (Join Migrations, SqlServer)
 
 "PreMigrationScripts";
-dotnet run -- sql exec-script $PSScriptRoot\PreMigrationScripts;
+dotnet run -- sqlserver exec-script $PSScriptRoot\PreMigrationScripts;
 
 "Migrate";
-dotnet run --no-build -- sql ef-migrate
+dotnet run --no-build -- sqlserver ef-migrate
 
 "PostMigrationScripts";
-dotnet run --no-build -- sql exec-script $PSScriptRoot\Scripts
+dotnet run --no-build -- sqlserver exec-script $PSScriptRoot\Scripts
 
 "Generate scripts"
-dotnet run --no-build -- sql create-script --output-file $PSScriptRoot\db\tables.sql --drop-script $PSScriptRoot\db\drop.sql
+dotnet run --no-build -- sqlserver create-script --output-file (Join $PSScriptRoot, "db", "sqlserver", "tables.sql") --drop-script (Join $PSScriptRoot, "db", "sqlserver", "drop.sql")
 
 Set-Location $location;

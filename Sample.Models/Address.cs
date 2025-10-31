@@ -21,7 +21,7 @@ namespace Sample.Models {
 		[MaxLength(My.TitleLength)]
 		public string? PostalCode { get; set; }
 
-		public Contact? Contact { get; set; }
+		public Contact Contact { get; set; } = null!;
 		public int ContactId { get; set; }
 	}
 
