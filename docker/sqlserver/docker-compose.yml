@@ -1,0 +1,17 @@
+# docker-compose.yml
+services:
+  mssqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "admin@123456"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    mem_limit: 4g
+volumes:
+  mssql_data:
+    external: true
