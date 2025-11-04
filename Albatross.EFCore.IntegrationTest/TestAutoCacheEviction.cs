@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Sample.EFCore;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Albatross.EFCore.Test {
+namespace Albatross.EFCore.IntegrationTest {
 	public class TestAutoCacheEviction {
 		[Fact]
 		public async Task TestRun() {

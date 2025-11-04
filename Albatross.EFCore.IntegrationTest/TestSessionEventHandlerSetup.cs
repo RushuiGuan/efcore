@@ -2,13 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Sample.EFCore;
-using Sample.EFCore.Models;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Albatross.EFCore.Test {
+namespace Albatross.EFCore.IntegrationTest {
 	public class TestSessionEventHandlerSetup {
 		void RegisterServices_1(IConfiguration configuration, IServiceCollection services) {
 			My.RegisterServices(configuration, services);

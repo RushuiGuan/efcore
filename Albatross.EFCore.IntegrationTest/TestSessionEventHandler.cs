@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Threading.Tasks;
 
-namespace Albatross.EFCore.Test {
+namespace Albatross.EFCore.IntegrationTest {
 	public class TestSessionEventHandler : IDbSessionEventHandler {
 		public TestSessionEventHandler(GetCurrentTestUser getCurrentTestUser) {
 			this.getCurrentTestUser = getCurrentTestUser;

@@ -1,15 +1,12 @@
 ﻿using Albatross.EFCore.ChangeReporting;
 using Albatross.Testing.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sample.EFCore;
-using Sample.EFCore.Models;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Albatross.EFCore.Test {
+namespace Albatross.EFCore.IntegrationTest {
 	public class TestChangeReporting {
 		void RegisterServices_Report1(IConfiguration configuration, IServiceCollection services, Action<string> reportGenerated) {
 			services.AddChangeReporting(new ChangeReportBuilder<MyData>()

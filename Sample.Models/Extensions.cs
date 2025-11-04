@@ -1,6 +1,6 @@
 using Albatross.EFCore;
 using Albatross.EFCore.Audit;
-using Albatross.EFCore.SqlServer;
+using Albatross.EFCore.ChangeReporting;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Sample.Models {
@@ -8,10 +8,28 @@ namespace Sample.Models {
 		public static IServiceCollection AddSampleDbSession(this IServiceCollection services) {
 			services.AddDbSessionEvents()
 				.AddAuditEventHandlers()
-			// .AddChangeReports();
-			// .AddAutoCacheEviction()
-			.AddSqlServerWithContextPool<SampleDbSession>(provider => provider.GetRequiredService<ISampleConfig>().ConnectionString)
-			.AddScoped<ISampleDbSession>(provider => provider.GetRequiredService<SampleDbSession>());
+				.AddChangeReporting()
+				// .AddAutoCacheEviction()
+				.AddScoped<ISampleDbSession>(provider => provider.GetRequiredService<SampleDbSession>());
+			return services;
+		}
+
+		public static IServiceCollection AddChangeReporting(this IServiceCollection services) {
+			services.AddChangeReporting(new ChangeReportBuilder<Contact> {
+				Type = ChangeType.All,
+				Prefix = "``` start\n",
+				Postfix = "```",
+				FixedHeaders = [nameof(Contact.Id)],
+				OnReportGenerated = text => Console.Out.WriteLineAsync(text)
+			}.ExcludeAuditProperties());
+
+			services.AddChangeReporting(new ChangeReportBuilder<Address> {
+				Type = ChangeType.All,
+				Prefix = "``` start\n",
+				Postfix = "```",
+				FixedHeaders = [nameof(Address.Id)],
+				OnReportGenerated = text => Console.Out.WriteLineAsync(text)
+			});
 			return services;
 		}
 	}

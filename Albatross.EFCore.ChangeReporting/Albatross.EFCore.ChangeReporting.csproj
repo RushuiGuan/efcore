@@ -24,8 +24,9 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Text.Table" Version="8.2.0" />
-		<PackageReference Include="Albatross.Text" Version="8.2.0" />
+		<PackageReference Include="Albatross.Reflection" Version="8.0.5" />
+		<PackageReference Include="Albatross.Text.Table" Version="8.2.1" />
+		<PackageReference Include="Albatross.Text" Version="8.2.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.21" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.21" />
 	</ItemGroup>

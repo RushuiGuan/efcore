@@ -9,8 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sample.Admin {
-	[Verb("postgres edit-contact", typeof(UpdateContact), Description = "Edit an existing contact")]
-	[Verb("sqlserver edit-contact", typeof(UpdateContact), Description = "Edit an existing contact")]
+	[Verb("postgres contact edit", typeof(UpdateContact), Description = "Edit an existing contact")]
+	[Verb("sqlserver contact edit", typeof(UpdateContact), Description = "Edit an existing contact")]
 	public class UpdateContactOptions {
 		[Argument(Description = "Contact name")]
 		public string Name { get; set; } = string.Empty;

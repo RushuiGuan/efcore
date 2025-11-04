@@ -1,12 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Sample.EFCore;
-using Sample.EFCore.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Albatross.EFCore.Test {
+namespace Albatross.EFCore.IntegrationTest {
 	public class TestJsonColumn {
 		// [Fact(Skip ="require sql server")]
 		[Fact]

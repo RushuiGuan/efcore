@@ -1,14 +1,9 @@
-﻿using Albatross.DateLevel;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Sample.EFCore;
-using Sample.EFCore.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Albatross.EFCore.Test.MyNamespace {
+namespace Albatross.EFCore.IntegrationTest {
 	public class TestSampleDbSession  {
 		//[Fact(Skip = "require database")]
 		[Fact]

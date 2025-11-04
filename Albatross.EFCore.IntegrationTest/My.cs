@@ -9,15 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
-using Sample.EFCore;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 
-namespace Albatross.EFCore.Test {
+namespace Albatross.EFCore.IntegrationTest {
 	public static class My {
 		public static void RegisterServices(IConfiguration configuration, IServiceCollection services) {
-			services.AddSample();
 			services.AddMemCaching();
 			services.AddCaching();
 			services.AddBuiltInCache();

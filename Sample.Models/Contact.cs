@@ -13,7 +13,9 @@ namespace Sample.Models {
 		public List<Address> Addresses { get; set; } = new List<Address>();
 		public ContactProperty? Property { get; }
 
+		[MaxLength(My.NameLength)]
 		public string CreatedBy { get; set; } = string.Empty;
+		[MaxLength(My.NameLength)]
 		public string ModifiedBy { get; set; } = string.Empty;
 		public DateTime CreatedUtc { get; set; }
 		public DateTime ModifiedUtc { get; set; }

@@ -6,8 +6,8 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 
 namespace Sample.Admin {
-	[Verb("postgres new-contact", typeof(NewContact), Description = "Create a new contact")]
-	[Verb("sqlserver new-contact", typeof(NewContact), Description = "Create a new contact")]
+	[Verb("postgres contact new", typeof(NewContact), Description = "Create a new contact")]
+	[Verb("sqlserver contact new", typeof(NewContact), Description = "Create a new contact")]
 	public class NewContactOptions {
 		[Argument(Description = "Contact name")]
 		public string Name { get; set; } = string.Empty;

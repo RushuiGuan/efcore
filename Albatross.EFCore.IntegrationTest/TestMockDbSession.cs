@@ -1,11 +1,9 @@
 ﻿using Albatross.Testing.EFCore;
-using Microsoft.EntityFrameworkCore;
-using Sample.EFCore.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Albatross.EFCore.Test {
+namespace Albatross.EFCore.IntegrationTest {
 	public class TestMockDbSession {
 		readonly static Market[] Markets = new Market[] {
 			new Market("L"),

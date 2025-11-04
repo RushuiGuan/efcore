@@ -1,6 +1,6 @@
 ﻿using Albatross.Authentication;
 
-namespace Albatross.EFCore.Test {
+namespace Albatross.EFCore.IntegrationTest {
 	public class GetCurrentTestUser : IGetCurrentUser {
 		public GetCurrentTestUser(string user) {
 			this.User = user;

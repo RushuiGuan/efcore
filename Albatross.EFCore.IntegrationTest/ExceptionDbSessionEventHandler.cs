@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
 using System.Threading.Tasks;
 
-namespace Albatross.EFCore.Test {
-	public class PostSaveException : Exception { }
-	public class PreSaveException : Exception { }
+namespace Albatross.EFCore.IntegrationTest {
 	public class ExceptionDbSessionEventHandler : IDbSessionEventHandler {
 		public static bool ThrowPriorSaveException { get; set; }
 		public override string ToString() => nameof(ExceptionDbSessionEventHandler);

@@ -8,8 +8,8 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 
 namespace Sample.Admin {
-	[Verb("postgres new-address", typeof(NewAddress), Description = "Create a new address")]
-	[Verb("sqlserver new-address", typeof(NewAddress), Description = "Create a new address")]
+	[Verb("postgres address new", typeof(NewAddress), Description = "Create a new address")]
+	[Verb("sqlserver address new", typeof(NewAddress), Description = "Create a new address")]
 	public class NewAddressOptions {
 		[Argument(Description = "Contact name")]
 		public string Name { get; set; } = string.Empty;

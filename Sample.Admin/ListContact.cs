@@ -7,8 +7,8 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 
 namespace Sample.Admin {
-	[Verb("postgres list-contact", typeof(ListContact), Description = "List all existing contacts")]
-	[Verb("sqlserver list-contact", typeof(ListContact), Description = "List all existing contacts")]
+	[Verb("postgres contact list", typeof(ListContact), Description = "List all existing contacts")]
+	[Verb("sqlserver contact list", typeof(ListContact), Description = "List all existing contacts")]
 	public class ListContactOptions {
 		[Option("f", Description = "Output format expression")]
 		public string? Format { get; set; }

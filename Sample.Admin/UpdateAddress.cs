@@ -8,8 +8,8 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 
 namespace Sample.Admin {
-	[Verb("postgres edit-address", typeof(UpdateAddress), Description = "Edit an existing address")]
-	[Verb("sqlserver edit-address", typeof(UpdateAddress), Description = "Edit an existing address")]
+	[Verb("postgres address edit", typeof(UpdateAddress), Description = "Edit an existing address")]
+	[Verb("sqlserver address edit", typeof(UpdateAddress), Description = "Edit an existing address")]
 	public class UpdateAddressOptions {
 		[Argument(Description = "Address id")]
 		public int Id { get; set; }
