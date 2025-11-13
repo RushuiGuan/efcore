@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.Audit</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Authentication" Version="9.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.21" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.21" />
+		<PackageReference Include="Albatross.Authentication" Version="10.0.0-50.main" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0" />
 		<ProjectReference Include="..\Albatross.EFCore\Albatross.EFCore.csproj" />
 	</ItemGroup>
 	<ItemGroup>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.ChangeReporting</PackageProjectUrl>
 	</PropertyGroup>
@@ -24,10 +24,10 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Reflection" Version="8.0.5" />
-		<PackageReference Include="Albatross.Text.Table" Version="8.2.1" />
-		<PackageReference Include="Albatross.Text" Version="8.2.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.21" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.21" />
+		<PackageReference Include="Albatross.Reflection" Version="10.0.0-44.main" />
+		<PackageReference Include="Albatross.Text.Table" Version="10.0.0-96.main" />
+		<PackageReference Include="Albatross.Text" Version="10.0.0-96.main" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0" />
 	</ItemGroup>
 </Project>

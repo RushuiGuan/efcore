@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.AutoCacheEviction</PackageProjectUrl>
 		<PackageIcon>icon.png</PackageIcon>
@@ -9,8 +9,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Albatross.EFCore\Albatross.EFCore.csproj" />
 		<PackageReference Include="Albatross.Caching" Version="7.5.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.21" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.21" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\icon.png">
