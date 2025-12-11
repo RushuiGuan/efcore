@@ -10,12 +10,12 @@
 		<PackageReference Include="Albatross.CommandLine" Version="8.0.0" />
 		<PackageReference Include="Albatross.Reflection" Version="10.0.0-44.main" />
 		<PackageReference Include="Albatross.Text.CliFormat" Version="10.0.0-96.main" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1" />
 		<ProjectReference Include="..\Albatross.EFCore.Admin\Albatross.EFCore.Admin.csproj" />
 		<ProjectReference Include="..\Sample.Models\Sample.Models.csproj" />
 	</ItemGroup>

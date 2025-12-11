@@ -35,7 +35,7 @@ namespace Albatross.EFCore.CodeGen {
 					if (classSymbol.AllInterfaces.Any(x => x.GetFullName() == My.EntityModelBuilderInterfaceName
 						&& (!x.Constructors.Any() || x.Constructors.Any(x => x.Parameters.Length == 0)))) {
 						EntityModelBuilderClasses.Add(classSymbol);
-					} else if (classSymbol.IsDerivedFrom(My.DbSessionClassName)) {
+					} else if (classSymbol.IsDerivedFrom(compilation.GetRequiredSymbol(My.DbSessionClassName))) {
 						DbSessionClass = classSymbol;
 					}
 				}

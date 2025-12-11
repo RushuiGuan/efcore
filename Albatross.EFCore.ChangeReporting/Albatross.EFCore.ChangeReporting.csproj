@@ -24,10 +24,10 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Reflection" Version="10.0.0-44.main" />
-		<PackageReference Include="Albatross.Text.Table" Version="10.0.0-96.main" />
-		<PackageReference Include="Albatross.Text" Version="10.0.0-96.main" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0" />
+		<PackageReference Include="Albatross.Reflection" Version="8.0.7" />
+		<PackageReference Include="Albatross.Text.Table" Version="9.0.1" />
+		<PackageReference Include="Albatross.Text" Version="9.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1" />
 	</ItemGroup>
 </Project>
