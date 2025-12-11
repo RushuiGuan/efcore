@@ -10,7 +10,7 @@ Albatross.EFCore.SqlServer
 Albatross.Testing.EFCore
 
 # tests
-Albatross.EFCore.IntegrationTest
+# Albatross.EFCore.IntegrationTest
 
 # apps
 Sample.Admin
