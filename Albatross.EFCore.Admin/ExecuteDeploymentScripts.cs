@@ -17,11 +17,12 @@ namespace Albatross.EFCore.Admin {
 		public bool PreMigration { get; set; }
 	}
 
-	public class ExecuteDeploymentScripts<T> : BaseHandler<ExecuteDeploymentScriptsParams> where T : IDbSession {
+	public class ExecuteDeploymentScripts<T> : IAsyncCommandHandler where T : IDbSession {
 		private readonly IExecuteScriptFile executeScriptFile;
 		private readonly T session;
 		private readonly ILogger logger;
-		
+		private readonly ExecuteDeploymentScriptsParams parameters;
+
 		static string FindTargetVersionScriptLocation(string directory) {
 			var version = Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 			if (string.IsNullOrEmpty(version)) {
@@ -37,13 +38,14 @@ namespace Albatross.EFCore.Admin {
 		}
 		
 
-		public ExecuteDeploymentScripts(IExecuteScriptFile executeScriptFile, T session, ILogger logger, ParseResult parseResult, ExecuteDeploymentScriptsParams options) : base(parseResult, options) {
+		public ExecuteDeploymentScripts(IExecuteScriptFile executeScriptFile, T session, ILogger logger, ExecuteDeploymentScriptsParams parameters) {
 			this.executeScriptFile = executeScriptFile;
 			this.session = session;
 			this.logger = logger;
+			this.parameters = parameters;
 		}
 
-		public override async Task<int> InvokeAsync(CancellationToken cancellationToken) {
+		public async Task<int> InvokeAsync(CancellationToken cancellationToken) {
 			if (parameters.PreMigration && !this.session.DbContext.Database.HasPendingModelChanges()) {
 				logger.LogInformation("Skip pre-migration script since there is no pending model changes");
 				return 0;
@@ -53,7 +55,7 @@ namespace Albatross.EFCore.Admin {
 				var info = new DirectoryInfo(directory);
 				if (info.Exists) {
 					foreach (var file in info.GetFiles("*.sql", SearchOption.TopDirectoryOnly)) {
-						await this.executeScriptFile.ExecuteAsync(this.session.DbContext, file.FullName);
+						await this.executeScriptFile.ExecuteAsync(this.session.DbContext, file.FullName, cancellationToken);
 					}
 				}
 				return 0;

@@ -3,6 +3,7 @@ using Albatross.Text;
 using Microsoft.Extensions.Configuration;
 
 namespace Sample.Models.SqlServer {
+
 	public class SampleConfig : ConfigBase, ISampleConfig {
 		public SampleConfig(IConfiguration configuration) : base(configuration, null) {
 			this.ConnectionString = configuration.GetRequiredConnectionString("sqlserver")

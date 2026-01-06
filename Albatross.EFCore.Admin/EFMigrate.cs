@@ -1,20 +1,21 @@
 ﻿using Albatross.CommandLine;
 using Microsoft.EntityFrameworkCore;
-using System.CommandLine;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Albatross.EFCore.Admin {
 	public class EFMigrationParams { }
 
-	public class EFMigrate<T> : BaseHandler<EFMigrationParams> where T:IDbSession{
+	public class EFMigrate<T> : IAsyncCommandHandler where T:IDbSession{
 		private readonly T session;
+		private readonly EFMigrationParams parameters;
 
-		public EFMigrate(T session, ParseResult result, EFMigrationParams options) : base(result, options) {
+		public EFMigrate(T session, EFMigrationParams parameters) {
 			this.session = session;
+			this.parameters = parameters;
 		}
 		
-		public override async Task<int> InvokeAsync(CancellationToken cancellationToken) {
+		public async Task<int> InvokeAsync(CancellationToken cancellationToken) {
 			await session.DbContext.Database.MigrateAsync(cancellationToken);
 			return 0;
 		}

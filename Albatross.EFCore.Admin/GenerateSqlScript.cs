@@ -17,13 +17,18 @@ namespace Albatross.EFCore.Admin {
 		public string? DropScript { get; set; }
 	}
 
-	public class GenerateSqlScript<T> : BaseHandler<GenerateSqlScriptOptions> where T:IDbSession{
+	public class GenerateSqlScript<T> : IAsyncCommandHandler where T : IDbSession {
 		private readonly T session;
+		private readonly ParseResult parseResult;
+		private readonly GenerateSqlScriptOptions parameters;
 
-		public GenerateSqlScript(T session, ParseResult parseResult, GenerateSqlScriptOptions parameters) : base(parseResult, parameters) {
+		public GenerateSqlScript(T session, ParseResult parseResult, GenerateSqlScriptOptions parameters) {
 			this.session = session;
+			this.parseResult = parseResult;
+			this.parameters = parameters;
 		}
-		public override Task<int> InvokeAsync(CancellationToken cancellationToken) {
+		public TextWriter Writer => parseResult.InvocationConfiguration.Output;
+		public Task<int> InvokeAsync(CancellationToken cancellationToken) {
 			string script = session.GetCreateScript();
 			using (var reader = new StringReader(script)) {
 				string content = reader.ReadToEnd();
