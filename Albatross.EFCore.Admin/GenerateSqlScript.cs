@@ -1,11 +1,11 @@
 ﻿using Albatross.CommandLine;
-using Albatross.EFCore;
+using Albatross.CommandLine.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.CommandLine.Invocation;
+using System.CommandLine;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Albatross.EFCore.Admin {
@@ -20,21 +20,21 @@ namespace Albatross.EFCore.Admin {
 	public class GenerateSqlScript<T> : BaseHandler<GenerateSqlScriptOptions> where T:IDbSession{
 		private readonly T session;
 
-		public GenerateSqlScript(T session, IOptions<GenerateSqlScriptOptions> options) : base(options) {
+		public GenerateSqlScript(T session, ParseResult parseResult, GenerateSqlScriptOptions parameters) : base(parseResult, parameters) {
 			this.session = session;
 		}
-		public override Task<int> InvokeAsync(InvocationContext context) {
+		public override Task<int> InvokeAsync(CancellationToken cancellationToken) {
 			string script = session.GetCreateScript();
 			using (var reader = new StringReader(script)) {
 				string content = reader.ReadToEnd();
-				this.writer.WriteLine(content);
-				if (!string.IsNullOrEmpty(options.Out)) {
-					using (var file = new StreamWriter(options.Out)) {
+				this.Writer.WriteLine(content);
+				if (!string.IsNullOrEmpty(parameters.Out)) {
+					using (var file = new StreamWriter(parameters.Out)) {
 						file.WriteLine(content);
 					}
 				}
 			}
-			if (!string.IsNullOrEmpty(options.DropScript)) {
+			if (!string.IsNullOrEmpty(parameters.DropScript)) {
 				List<string> tables = new List<string>();
 				Regex regex = new Regex(@"^CREATE TABLE (\[\w+\]\.\[\w+\]) \($", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 				using (StringReader reader = new StringReader(script)) {
@@ -48,7 +48,7 @@ namespace Albatross.EFCore.Admin {
 					}
 				}
 
-				using (var writer = new StreamWriter(options.DropScript)) {
+				using (var writer = new StreamWriter(parameters.DropScript)) {
 					var schema = session.DbContext.Model.GetDefaultSchema() ?? "dbo";
 					tables.Reverse();
 					foreach (var table in tables) {

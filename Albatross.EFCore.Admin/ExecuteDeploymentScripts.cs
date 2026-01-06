@@ -1,14 +1,15 @@
 ﻿using Albatross.CommandLine;
+using Albatross.CommandLine.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.CommandLine.Invocation;
+using System.CommandLine;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Albatross.EFCore.Admin {
-	public class ExecuteDeploymentScriptsOptions {
+	public class ExecuteDeploymentScriptsParams {
 		[Argument(Description = "The directory where the scripts are located")]
 		public string Directory { get; set; } = string.Empty;
 
@@ -16,7 +17,7 @@ namespace Albatross.EFCore.Admin {
 		public bool PreMigration { get; set; }
 	}
 
-	public class ExecuteDeploymentScripts<T> : BaseHandler<ExecuteDeploymentScriptsOptions> where T : IDbSession {
+	public class ExecuteDeploymentScripts<T> : BaseHandler<ExecuteDeploymentScriptsParams> where T : IDbSession {
 		private readonly IExecuteScriptFile executeScriptFile;
 		private readonly T session;
 		private readonly ILogger logger;
@@ -36,18 +37,18 @@ namespace Albatross.EFCore.Admin {
 		}
 		
 
-		public ExecuteDeploymentScripts(IExecuteScriptFile executeScriptFile, T session, ILogger logger, IOptions<ExecuteDeploymentScriptsOptions> options) : base(options) {
+		public ExecuteDeploymentScripts(IExecuteScriptFile executeScriptFile, T session, ILogger logger, ParseResult parseResult, ExecuteDeploymentScriptsParams options) : base(parseResult, options) {
 			this.executeScriptFile = executeScriptFile;
 			this.session = session;
 			this.logger = logger;
 		}
 
-		public override async Task<int> InvokeAsync(InvocationContext context) {
-			if (options.PreMigration && !this.session.DbContext.Database.HasPendingModelChanges()) {
+		public override async Task<int> InvokeAsync(CancellationToken cancellationToken) {
+			if (parameters.PreMigration && !this.session.DbContext.Database.HasPendingModelChanges()) {
 				logger.LogInformation("Skip pre-migration script since there is no pending model changes");
 				return 0;
 			} else {
-				var directory = FindTargetVersionScriptLocation(options.Directory);
+				var directory = FindTargetVersionScriptLocation(parameters.Directory);
 				logger.LogInformation("Executing deployment scripts at {location}", directory);
 				var info = new DirectoryInfo(directory);
 				if (info.Exists) {
@@ -55,7 +56,6 @@ namespace Albatross.EFCore.Admin {
 						await this.executeScriptFile.ExecuteAsync(this.session.DbContext, file.FullName);
 					}
 				}
-
 				return 0;
 			}
 		}

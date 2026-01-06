@@ -1,13 +1,14 @@
 # packages
 Albatross.EFCore.CodeGen
 Albatross.EFCore
-# Albatross.EFCore.Admin
-# Albatross.EFCore.Audit
-# Albatross.EFCore.AutoCacheEviction
-# Albatross.EFCore.ChangeReporting
-# Albatross.EFCore.PostgreSQL
-# Albatross.EFCore.SqlServer
-# Albatross.Testing.EFCore
+Albatross.EFCore.Audit
+Albatross.EFCore.ChangeReporting
+Albatross.EFCore.AutoCacheEviction
+
+Albatross.EFCore.PostgreSQL
+Albatross.EFCore.SqlServer
+Albatross.EFCore.Admin
+Albatross.EFCore.Testing
 
 # tests
 # Albatross.EFCore.IntegrationTest
