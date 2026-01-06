@@ -1,7 +1,4 @@
-﻿using Shared = Albatross.CodeAnalysis.My;
-using Albatross.CodeAnalysis;
-using Albatross.CodeAnalysis.Symbols;
-using Albatross.CodeAnalysis.Syntax;
+﻿using Albatross.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -13,7 +10,24 @@ using System.Text;
 
 namespace Albatross.EFCore.CodeGen {
 	[Generator]
-	public class EntityModelBuilderClassCodeGen : ISourceGenerator {
+	public class EntityModelBuilderClassCodeGenerator : IIncrementalGenerator {
+		public void Initialize(IncrementalGeneratorInitializationContext context) {
+			var compilationProvider = context.CompilationProvider;
+			var classes = context.SyntaxProvider.CreateSyntaxProvider(
+				static (node, _) => node is Microsoft.CodeAnalysis.CSharp.Syntax.ClassDeclarationSyntax or Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax,
+				static (ctx, _) => {
+					var symbol = ctx.SemanticModel.GetDeclaredSymbol(ctx.Node) as INamedTypeSymbol;
+					if (symbol != null && symbol.IsConcreteClass()) {
+						return symbol;
+					}
+					return null;
+				}
+			).Where(static x => x != null);
+
+			compilationProvider.Combine(classes.Collect()).Select(static (tuple, _) => { 
+				var (compilation, classSymbols) = tuple;
+			});
+		}
 		public void Execute(GeneratorExecutionContext context) {
 			using var writer = new StringWriter();
 			string? dbSessionNamespace = null;
@@ -81,7 +95,5 @@ namespace Albatross.EFCore.CodeGen {
 				}
 			}
 		}
-
-		public void Initialize(GeneratorInitializationContext context) { }
 	}
 }

@@ -9,7 +9,7 @@
 	<ItemGroup>
 		<CompilerVisibleProperty Include="EmitAlbatrossCodeGenDebugFile" />
 		<PackageReference Include="Albatross.Config" Version="10.0.0-16.main" />
-		<PackageReference Include="Albatross.Text" Version="10.0.0-96.main" />
+		<PackageReference Include="Albatross.Text" Version="9.0.3" />
 		<ProjectReference Include="..\Albatross.EFCore.Audit\Albatross.EFCore.Audit.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.ChangeReporting\Albatross.EFCore.ChangeReporting.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.PostgreSQL\Albatross.EFCore.PostgreSQL.csproj" />

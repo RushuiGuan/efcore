@@ -9,7 +9,7 @@
 		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.Testing.EFCore</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Reflection" Version="10.0.0-44.main" />
+		<PackageReference Include="Albatross.Reflection" Version="8.0.7" />
 		<PackageReference Include="Albatross.Testing" Version="10.0.0-8.main" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1" />

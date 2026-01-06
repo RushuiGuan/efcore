@@ -6,10 +6,10 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Authentication" Version="10.0.0-50.main" />
+		<PackageReference Include="Albatross.Authentication" Version="8.1.0" />
 		<PackageReference Include="Albatross.CommandLine" Version="8.0.0" />
-		<PackageReference Include="Albatross.Reflection" Version="10.0.0-44.main" />
-		<PackageReference Include="Albatross.Text.CliFormat" Version="10.0.0-96.main" />
+		<PackageReference Include="Albatross.Reflection" Version="8.0.7" />
+		<PackageReference Include="Albatross.Text.CliFormat" Version="9.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
 			<PrivateAssets>all</PrivateAssets>
