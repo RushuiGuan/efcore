@@ -6,13 +6,19 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Config" Version="10.0.0-16.main" />
+		<PackageReference Include="Albatross.Config" Version="7.5.11" />
 		<PackageReference Include="Albatross.Text" Version="9.0.3" />
-		
 		<ProjectReference Include="..\Albatross.EFCore.Audit\Albatross.EFCore.Audit.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.ChangeReporting\Albatross.EFCore.ChangeReporting.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.PostgreSQL\Albatross.EFCore.PostgreSQL.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.SqlServer\Albatross.EFCore.SqlServer.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore\Albatross.EFCore.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Albatross.EFCore.CodeGen\Albatross.EFCore.CodeGen.csproj">
+			<PrivateAssets>all</PrivateAssets>
+			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+			<OutputItemType>Analyzer</OutputItemType>
+		</ProjectReference>
 	</ItemGroup>
 </Project>
