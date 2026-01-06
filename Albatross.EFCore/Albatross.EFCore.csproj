@@ -7,7 +7,7 @@
 		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.EFCore.CodeGen" Version="10.0.0-35.main">
+		<PackageReference Include="Albatross.EFCore.CodeGen" Version="10.0.0-37.main">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

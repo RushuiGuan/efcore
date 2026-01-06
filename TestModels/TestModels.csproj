@@ -6,6 +6,6 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.EFCore" Version="10.0.0-35.main" />
+		<PackageReference Include="Albatross.EFCore" Version="10.0.0-36.main" />
 	</ItemGroup>
 </Project>
