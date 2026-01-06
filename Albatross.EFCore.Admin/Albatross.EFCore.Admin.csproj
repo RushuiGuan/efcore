@@ -12,11 +12,16 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<ProjectReference Include="..\Albatross.EFCore.CodeGen\Albatross.EFCore.CodeGen.csproj">
+			<PrivateAssets>all</PrivateAssets>
+			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+			<OutputItemType>Analyzer</OutputItemType>
+		</ProjectReference>
+		
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1" />
-	</ItemGroup>
-	<ItemGroup>
 		<ProjectReference Include="..\Albatross.EFCore.PostgreSQL\Albatross.EFCore.PostgreSQL.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.SqlServer\Albatross.EFCore.SqlServer.csproj" />
+		<ProjectReference Include="..\Albatross.EFCore\Albatross.EFCore.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\icon.png">
