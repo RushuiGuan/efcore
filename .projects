@@ -1,6 +1,6 @@
 # packages
-Albatross.EFCore
 Albatross.EFCore.CodeGen
+Albatross.EFCore
 # Albatross.EFCore.Admin
 # Albatross.EFCore.Audit
 # Albatross.EFCore.AutoCacheEviction

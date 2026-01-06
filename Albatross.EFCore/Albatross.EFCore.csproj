@@ -7,10 +7,7 @@
 		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.EFCore.CodeGen" Version="10.0.0-37.main">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<PackageReference Include="Albatross.EFCore.CodeGen" Version="10.0.0-38.main" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
