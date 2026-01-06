@@ -1,28 +1,31 @@
 ﻿using Albatross.CommandLine;
+using Albatross.CommandLine.Annotations;
+using Albatross.CommandLine.Inputs;
+using Albatross.Expression.Nodes;
 using Albatross.Text.CliFormat;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Sample.Models;
-using System.CommandLine.Invocation;
+using System.CommandLine;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Sample.Admin {
-	[Verb("postgres contact list", typeof(ListContact), Description = "List all existing contacts")]
-	[Verb("sqlserver contact list", typeof(ListContact), Description = "List all existing contacts")]
-	public class ListContactOptions {
-		[Option("f", Description = "Output format expression")]
-		public string? Format { get; set; }
+	[Verb<ListContact>("postgres contact list", Description = "List all existing contacts")]
+	[Verb<ListContact>("sqlserver contact list", Description = "List all existing contacts")]
+	public class ListContactParams {
+		[UseOption<FormatExpressionOption>]
+		public IExpression? Format { get; set; }
 	}
-	public class ListContact : BaseHandler<ListContactOptions> {
+	public class ListContact : BaseHandler<ListContactParams> {
 		private readonly ISampleDbSession session;
 
-		public ListContact(IOptions<ListContactOptions> options, ISampleDbSession session) : base(options) {
+		public ListContact(ListContactParams options, ParseResult result, ISampleDbSession session) : base(result, options) {
 			this.session = session;
 		}
 
-		public override async Task<int> InvokeAsync(InvocationContext context) {
-			var items  = await this.session.DbContext.Set<Contact>().ToArrayAsync();
-			this.writer.CliPrint(items, options.Format);
+		public override async Task<int> InvokeAsync(CancellationToken cancellationToken) {
+			var items = await this.session.DbContext.Set<Contact>().ToArrayAsync(cancellationToken);
+			this.Writer.CliPrintWithExpression(items, parameters.Format);
 			return 0;
 		}
 	}

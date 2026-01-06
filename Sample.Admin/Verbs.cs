@@ -1,12 +1,12 @@
-﻿using Albatross.CommandLine;
+﻿using Albatross.CommandLine.Annotations;
 using Albatross.EFCore.Admin;
 using Sample.Admin;
 
-[assembly: Verb("postgres exec-script", typeof(ExecuteDeploymentScripts<SamplePostgresMigration>), OptionsClass = typeof(ExecuteDeploymentScriptsParams), Description = "Execute postgres deployment scripts")]
-[assembly: Verb("postgres create-script", typeof(GenerateSqlScript<SamplePostgresMigration>), OptionsClass = typeof(GenerateSqlScriptOptions), Description = "Generate sql script for postgres")]
-[assembly: Verb("postgres ef-migrate", typeof(EFMigrate<SamplePostgresMigration>), OptionsClass = typeof(EFMigrationParams), Description = "Migrate postgres database using dotnet ef tool")]
-	
-	
-[assembly: Verb("sqlserver exec-script", typeof(ExecuteDeploymentScripts<SampleSqlServerMigration>), OptionsClass = typeof(ExecuteDeploymentScriptsParams), Description = "Execute sql server deployment scripts")]
-[assembly: Verb("sqlserver create-script", typeof(GenerateSqlScript<SampleSqlServerMigration>), OptionsClass = typeof(GenerateSqlScriptOptions), Description = "Generate sql script for sql server")]
-[assembly: Verb("sqlserver ef-migrate", typeof(EFMigrate<SampleSqlServerMigration>), OptionsClass = typeof(EFMigrationParams), Description = "Migrate sql server database using dotnet ef tool")]
+[assembly: Verb<ExecuteDeploymentScriptsParams, ExecuteDeploymentScripts<SamplePostgresMigration>>("postgres exec-script", Description = "Execute postgres deployment scripts")]
+[assembly: Verb<GenerateSqlScriptOptions, GenerateSqlScript<SamplePostgresMigration>>("postgres create-script", Description = "Generate sql script for postgres")]
+[assembly: Verb<EFMigrationParams, EFMigrate<SamplePostgresMigration>>("postgres ef-migrate", Description = "Migrate postgres database using dotnet ef tool")]
+
+
+[assembly: Verb<ExecuteDeploymentScriptsParams, ExecuteDeploymentScripts<SampleSqlServerMigration>>("sqlserver exec-script", Description = "Execute sql server deployment scripts")]
+[assembly: Verb<GenerateSqlScriptOptions, GenerateSqlScript<SampleSqlServerMigration>>("sqlserver create-script", Description = "Generate sql script for sql server")]
+[assembly: Verb<EFMigrationParams, EFMigrate<SampleSqlServerMigration>>("sqlserver ef-migrate", Description = "Migrate sql server database using dotnet ef tool")]

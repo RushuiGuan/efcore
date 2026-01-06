@@ -1,5 +1,6 @@
 ﻿using Albatross.CommandLine;
 using Albatross.CommandLine.Annotations;
+using Albatross.CommandLine.Inputs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
@@ -10,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Albatross.EFCore.Admin {
 	public class ExecuteDeploymentScriptsParams {
-		[Argument(Description = "The directory where the scripts are located")]
-		public string Directory { get; set; } = string.Empty;
+		[UseArgument<InputDirectoryArgument>]
+		public required DirectoryInfo Directory { get; set; }
 
 		[Option("pre", Description = "If true, the scripts should be executed prior the ef migration.  They should be skipped if there are no pending migrations")]
 		public bool PreMigration { get; set; }
@@ -50,7 +51,7 @@ namespace Albatross.EFCore.Admin {
 				logger.LogInformation("Skip pre-migration script since there is no pending model changes");
 				return 0;
 			} else {
-				var directory = FindTargetVersionScriptLocation(parameters.Directory);
+				var directory = FindTargetVersionScriptLocation(parameters.Directory.FullName);
 				logger.LogInformation("Executing deployment scripts at {location}", directory);
 				var info = new DirectoryInfo(directory);
 				if (info.Exists) {

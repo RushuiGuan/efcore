@@ -1,39 +1,42 @@
 ﻿using Albatross.CommandLine;
+using Albatross.CommandLine.Annotations;
+using Albatross.CommandLine.Inputs;
+using Albatross.Expression.Nodes;
 using Albatross.Text.CliFormat;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Sample.Models;
 using System;
-using System.CommandLine.Invocation;
+using System.CommandLine;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Sample.Admin {
-	[Verb("postgres contact edit", typeof(UpdateContact), Description = "Edit an existing contact")]
-	[Verb("sqlserver contact edit", typeof(UpdateContact), Description = "Edit an existing contact")]
-	public class UpdateContactOptions {
+	[Verb<UpdateContact>("postgres contact edit", Description = "Edit an existing contact")]
+	[Verb<UpdateContact>("sqlserver contact edit", Description = "Edit an existing contact")]
+	public class UpdateContactParams {
 		[Argument(Description = "Contact name")]
 		public string Name { get; set; } = string.Empty;
 
 		[Option("new-name", Description = "New contact name")]
 		public string NewName { get; set; } = string.Empty;
 
-		[Option("f", Description = "Output format expression")]
-		public string? Format { get; set; }
+		[UseOption<FormatExpressionOption>]
+		public IExpression? Format { get; set; }
 	}
-	public class UpdateContact : BaseHandler<UpdateContactOptions> {
+	public class UpdateContact : BaseHandler<UpdateContactParams> {
 		private readonly ISampleDbSession session;
 
-		public UpdateContact(IOptions<UpdateContactOptions> options, ISampleDbSession session) : base(options) {
+		public UpdateContact(UpdateContactParams parameters, ParseResult result, ISampleDbSession session) : base(result, parameters) {
 			this.session = session;
 		}
 
-		public override async Task<int> InvokeAsync(InvocationContext context) {
-			var contact = await this.session.DbContext.Set<Contact>().Where(x=>x.Name == options.Name).FirstOrDefaultAsync() 
-				?? throw new ArgumentException($"'{options.Name}' is not a valid contact name");
-			contact.Name = options.NewName;
+		public override async Task<int> InvokeAsync(CancellationToken cancellationToken) {
+			var contact = await this.session.DbContext.Set<Contact>().Where(x=>x.Name == parameters.Name).FirstOrDefaultAsync() 
+				?? throw new ArgumentException($"'{parameters.Name}' is not a valid contact name");
+			contact.Name = parameters.NewName;
 			await this.session.SaveChangesAsync();
-			this.writer.CliPrint(contact, options.Format);
+			this.Writer.CliPrintWithExpression(contact, parameters.Format);
 			return 0;
 		}
 	}

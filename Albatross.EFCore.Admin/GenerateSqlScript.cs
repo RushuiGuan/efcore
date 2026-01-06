@@ -1,5 +1,6 @@
 ﻿using Albatross.CommandLine;
 using Albatross.CommandLine.Annotations;
+using Albatross.CommandLine.Inputs;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Albatross.EFCore.Admin {
 	public class GenerateSqlScriptOptions {
-		[Option("o", "--output-file", Description = "Set the output file")]
-		public string? Out { get; set; }
+		[UseOption<OutputFileOption>]
+		public FileInfo? OutputFile { get; init; }
 
-		[Option("d", Description = "Drop table scripts")]
-		public string? DropScript { get; set; }
+		[UseOption<OutputFileOption>(Description = "Drop table scripts", UseCustomName = true)]
+		public FileInfo? DropScript { get; set; }
 	}
 
 	public class GenerateSqlScript<T> : IAsyncCommandHandler where T : IDbSession {
@@ -33,13 +34,13 @@ namespace Albatross.EFCore.Admin {
 			using (var reader = new StringReader(script)) {
 				string content = reader.ReadToEnd();
 				this.Writer.WriteLine(content);
-				if (!string.IsNullOrEmpty(parameters.Out)) {
-					using (var file = new StreamWriter(parameters.Out)) {
+				if (parameters.OutputFile != null) {
+					using (var file = new StreamWriter(parameters.OutputFile.FullName)) {
 						file.WriteLine(content);
 					}
 				}
 			}
-			if (!string.IsNullOrEmpty(parameters.DropScript)) {
+			if (parameters.DropScript != null) {
 				List<string> tables = new List<string>();
 				Regex regex = new Regex(@"^CREATE TABLE (\[\w+\]\.\[\w+\]) \($", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 				using (StringReader reader = new StringReader(script)) {
@@ -53,7 +54,7 @@ namespace Albatross.EFCore.Admin {
 					}
 				}
 
-				using (var writer = new StreamWriter(parameters.DropScript)) {
+				using (var writer = new StreamWriter(parameters.DropScript.FullName)) {
 					var schema = session.DbContext.Model.GetDefaultSchema() ?? "dbo";
 					tables.Reverse();
 					foreach (var table in tables) {
