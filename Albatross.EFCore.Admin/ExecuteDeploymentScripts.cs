@@ -50,7 +50,7 @@ namespace Albatross.EFCore.Admin {
 				return 0;
 			} else {
 				var directory = FindTargetVersionScriptLocation(parameters.Directory.FullName);
-				await this.Writer.WriteLineAsync($"Found deployment folder: {directory}");
+				await this.Writer.WriteLineAsync($"Using deployment folder: {directory}");
 				var info = new DirectoryInfo(directory);
 				if (info.Exists) {
 					foreach (var file in info.GetFiles("*.sql", SearchOption.TopDirectoryOnly).OrderBy(x => x.Name)) {

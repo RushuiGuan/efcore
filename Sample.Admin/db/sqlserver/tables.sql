@@ -6,8 +6,8 @@ CREATE TABLE [sam].[Contact] (
     [Id] int NOT NULL IDENTITY,
     [Name] varchar(128) NOT NULL,
     [Property] varchar(max) NULL,
-    [CreatedBy] varchar(max) NOT NULL,
-    [ModifiedBy] varchar(max) NOT NULL,
+    [CreatedBy] varchar(128) NOT NULL,
+    [ModifiedBy] varchar(128) NOT NULL,
     [CreatedUtc] datetime2 NOT NULL,
     [ModifiedUtc] datetime2 NOT NULL,
     CONSTRAINT [PK_Contact] PRIMARY KEY ([Id])
@@ -23,6 +23,10 @@ CREATE TABLE [sam].[Address] (
     [State] varchar(512) NULL,
     [PostalCode] varchar(512) NULL,
     [ContactId] int NOT NULL,
+    [CreatedBy] varchar(128) NOT NULL,
+    [ModifiedBy] varchar(128) NOT NULL,
+    [CreatedUtc] datetime2 NOT NULL,
+    [ModifiedUtc] datetime2 NOT NULL,
     CONSTRAINT [PK_Address] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_Address_Contact_ContactId] FOREIGN KEY ([ContactId]) REFERENCES [sam].[Contact] ([Id]) ON DELETE CASCADE
 );
