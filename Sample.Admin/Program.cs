@@ -28,7 +28,7 @@ namespace Sample.Admin {
 				return await host.InvokeAsync();
 			}
 		}
-		static void RegisterServices(ParseResult result, IConfiguration configuration, IServiceCollection services) {
+		static void RegisterServices(ParseResult result, IServiceCollection services) {
 			services.AddSingleton<IGetCurrentUser, GetTestUser>();
 			services.AddSampleDbSession();
 
