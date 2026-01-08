@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Albatross.EFCore.Admin {
-	public class GenerateSqlScriptOptions {
+	public class GenerateSqlScriptParams {
 		[UseOption<OutputFileOption>]
 		public FileInfo? OutputFile { get; init; }
 
@@ -21,9 +21,9 @@ namespace Albatross.EFCore.Admin {
 	public class GenerateSqlScript<T> : IAsyncCommandHandler where T : IDbSession {
 		private readonly T session;
 		private readonly ParseResult parseResult;
-		private readonly GenerateSqlScriptOptions parameters;
+		private readonly GenerateSqlScriptParams parameters;
 
-		public GenerateSqlScript(T session, ParseResult parseResult, GenerateSqlScriptOptions parameters) {
+		public GenerateSqlScript(T session, ParseResult parseResult, GenerateSqlScriptParams parameters) {
 			this.session = session;
 			this.parseResult = parseResult;
 			this.parameters = parameters;
