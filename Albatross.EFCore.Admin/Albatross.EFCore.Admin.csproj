@@ -5,9 +5,9 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.CommandLine.Inputs" Version="8.0.1-125.main" />
+		<PackageReference Include="Albatross.CommandLine.Inputs" Version="8.0.1-138.main" />
 		<PackageReference Include="Albatross.SemVer" Version="2.0.5" />
-		<PackageReference Include="Albatross.CommandLine" Version="8.0.1-125.main" />
+		<PackageReference Include="Albatross.CommandLine" Version="8.0.1-138.main" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
 			<PrivateAssets>all</PrivateAssets>

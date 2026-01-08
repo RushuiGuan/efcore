@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<IsPackable>true</IsPackable>
 		<TestProject>false</TestProject>
-		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.Testing.EFCore</PackageProjectUrl>
+		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.Testing</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Albatross.Reflection" Version="8.0.7" />

@@ -1,4 +1,4 @@
-﻿using Albatross.Testing.EFCore;
+﻿using Albatross.EFCore.Testing;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;

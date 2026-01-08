@@ -7,8 +7,8 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Albatross.Authentication" Version="8.1.0" />
-		<PackageReference Include="Albatross.CommandLine" Version="8.0.1-125.main" />
-		<PackageReference Include="Albatross.CommandLine.Defaults" Version="8.0.1-125.main" />
+		<PackageReference Include="Albatross.CommandLine" Version="8.0.1-138.main" />
+		<PackageReference Include="Albatross.CommandLine.Defaults" Version="8.0.1-138.main" />
 		<PackageReference Include="Albatross.Reflection" Version="8.0.7" />
 		<PackageReference Include="Albatross.Text.CliFormat" Version="9.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />

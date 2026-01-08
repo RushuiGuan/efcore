@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albatross.EFCore.CodeGen", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albatross.EFCore.AutoCacheEviction", "Albatross.EFCore.AutoCacheEviction\Albatross.EFCore.AutoCacheEviction.csproj", "{80256557-C741-482D-8436-CF4500E35532}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albatross.Testing.EFCore", "Albatross.Testing.EFCore\Albatross.Testing.EFCore.csproj", "{3C390D6E-FAF7-4AA5-986C-879CBE4EB34F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albatross.EFCore.Testing", "Albatross.EFCore.Testing\Albatross.EFCore.Testing.csproj", "{3C390D6E-FAF7-4AA5-986C-879CBE4EB34F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Models", "Sample.Models\Sample.Models.csproj", "{9693E129-1313-486C-9795-E896C6B0F22B}"
 EndProject

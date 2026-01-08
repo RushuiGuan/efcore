@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace Albatross.Testing.EFCore {
+namespace Albatross.EFCore.Testing {
 	public static class Extension {
 		/// <summary>
 		/// This method can create a mock db session object using the provided enumerable items.  the session can be query 
