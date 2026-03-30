@@ -6,14 +6,20 @@
 				{
 					"src": "..",
 					"files": [
-						"**/*.csproj"
+						"Albatross.EFCore/Albatross.EFCore.csproj",
+						"Albatross.EFCore.*/Albatross.EFCore.*.csproj"
 					]
 				}
 			],
-			"dest": "api"
+			"output": "api"
 		}
 	],
 	"build": {
+		"sitemap": {
+			"baseUrl": "https://rushuiguan.github.io/efcore",
+			"priority": 0.5,
+			"changefreq": "weekly"
+		},
 		"content": [
 			{
 				"files": [
@@ -27,7 +33,10 @@
 		"resource": [
 			{
 				"files": [
-					"images/**"
+					"images/**",
+					"*.html",
+					"robots.txt",
+					".nojekyll"
 				]
 			}
 		],
@@ -39,8 +48,16 @@
 		"globalMetadata": {
 			"_appName": "Albatross.EFCore",
 			"_appTitle": "Albatross.EFCore",
+			"_appLogoPath": "./images/logo.svg",
+			"_appFaviconPath": "./images/favicon.svg",
 			"_enableSearch": true,
-			"pdf": false
+			"pdf": false,
+			"_gitContribute": {
+				"repo": "https://github.com/rushuiguan/efcore",
+				"branch": "main",
+				"path": "docfx_project"
+			},
+			"_gitUrlPattern": "github"
 		}
 	}
 }
