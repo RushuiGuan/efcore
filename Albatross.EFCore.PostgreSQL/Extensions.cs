@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using System;
 
@@ -38,6 +39,18 @@ namespace Albatross.EFCore.PostgreSQL {
 		public static IServiceCollection AddPostgresWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
 			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder ?? DefaultDbContextOptionBuilder));
 			return services;
+		}
+
+		// 23505: unique_violation
+		public static bool IsUniqueConstraintViolation(this Exception err) {
+			var pgEx = err as PostgresException ?? err.InnerException as PostgresException;
+			return pgEx?.SqlState == "23505";
+		}
+
+		// 23503: foreign_key_violation
+		public static bool IsForeignKeyConstraintViolation(this Exception err) {
+			var pgEx = err as PostgresException ?? err.InnerException as PostgresException;
+			return pgEx?.SqlState == "23503";
 		}
 	}
 }
