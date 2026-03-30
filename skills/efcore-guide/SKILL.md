@@ -195,38 +195,126 @@ services.AddDbSessionEvents();
 
 ---
 
-## Step 4 — Migrations (Admin Project)
+## Step 4 — Admin Project for Migrations
 
-The admin project has its own migration DbContext that derives from your app DbContext:
+The admin project is a separate console app (`OutputType=Exe`). It must never be merged into the main application.
+
+### Project file
+
+Reference `Albatross.EFCore.Admin` and `Microsoft.EntityFrameworkCore.Design` (as a private/build-only asset), plus the main app project:
+
+```xml
+<PackageReference Include="Albatross.EFCore.Admin" Version="..." />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="...">
+  <PrivateAssets>all</PrivateAssets>
+  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+</PackageReference>
+<ProjectReference Include="..\YourApp\YourApp.csproj" />
+```
+
+### Migration DbContext classes
+
+Create one migration DbContext per database type, deriving from the app's `DbSession`. Each needs a parameterless constructor (required by the `dotnet ef` tool) and a connection-string constructor. Use `BuildMigrationOption<T>` from the database-specific package to build the options:
 
 ```csharp
-public class SampleSqlMigration : SampleDbSession {
-    public SampleSqlMigration(DbContextOptions<SampleSqlMigration> options) : base(options) { }
+// PostgreSQL
+public class AppPostgresMigration : AppDbSession {
+    public AppPostgresMigration() : this("any") { }
+    public AppPostgresMigration(string connectionString)
+        : base(Albatross.EFCore.PostgreSQL.Extensions.BuildMigrationOption<AppDbSession>(Constants.Schema, connectionString)) { }
+}
+
+// SQL Server
+public class AppSqlServerMigration : AppDbSession {
+    public AppSqlServerMigration() : this("any") { }
+    public AppSqlServerMigration(string connectionString)
+        : base(Albatross.EFCore.SqlServer.Extensions.BuildMigrationOption<AppDbSession>(Constants.Schema, connectionString)) { }
 }
 ```
 
-**Add a migration:**
-```shell
-dotnet ef migrations add <MigrationName> \
-  --context SampleSqlMigration \
-  --output-dir Migrations/SqlServer
+### CLI verbs
+
+Use `Albatross.CommandLine` to define the admin CLI. Declare parent verbs for each database type in a shared `ParentParams` class:
+
+```csharp
+// ParentParams.cs
+[Verb("sqlserver", Alias = ["sql"], Description = "Execute sql server related commands")]
+[Verb("postgres",  Alias = ["pg"],  Description = "Execute postgresql server related commands")]
+public class ParentParams { }
 ```
 
-**Run the migration (via admin CLI):**
-```shell
-Sample.Admin.exe sql ef-migrate --verbose Information
+Wire up the built-in admin commands in `Verbs.cs` using assembly-level attributes:
+
+```csharp
+// Verbs.cs
+[assembly: Verb<ExecuteDeploymentScriptsParams, ExecuteDeploymentScripts<AppPostgresMigration>>("postgres exec-script")]
+[assembly: Verb<GenerateSqlScriptParams,        GenerateSqlScript<AppPostgresMigration>>       ("postgres create-script")]
+[assembly: Verb<EFMigrationParams,              EFMigrate<AppPostgresMigration>>               ("postgres ef-migrate")]
+
+[assembly: Verb<ExecuteDeploymentScriptsParams, ExecuteDeploymentScripts<AppSqlServerMigration>>("sqlserver exec-script")]
+[assembly: Verb<GenerateSqlScriptParams,        GenerateSqlScript<AppSqlServerMigration>>       ("sqlserver create-script")]
+[assembly: Verb<EFMigrationParams,              EFMigrate<AppSqlServerMigration>>               ("sqlserver ef-migrate")]
 ```
 
-**Generate SQL script (for review):**
-```shell
-Sample.Admin.exe sql create-sql-script
+### Program.cs
+
+Detect design-time (when the `dotnet ef` tool is running) and short-circuit early. At runtime, register the appropriate database provider and migration DbContext based on the command key:
+
+```csharp
+static async Task<int> Main(string[] args) {
+    if (EF.IsDesignTime) {
+        await new HostBuilder().Build().RunAsync();
+        return 0;
+    }
+    await using var host = new CommandHost("My Admin")
+        .RegisterServices(RegisterServices)
+        .AddCommands()
+        .Parse(args)
+        .WithDefaults()
+        .Build();
+    return await host.InvokeAsync();
+}
+
+static void RegisterServices(ParseResult result, IServiceCollection services) {
+    services.AddAppDbSession().AddApp();     // register your app's DI
+    var key = result.CommandResult.Command.GetCommandKey();
+    if (key.StartsWith("sqlserver")) {
+        services.AddConfig<IAppConfig, SqlServer.AppConfig>();
+        services.AddSingleton<IExecuteScriptFile, ExecuteSqlServerScriptFile>();
+        services.AddScoped(p => new AppSqlServerMigration(p.GetRequiredService<IAppConfig>().ConnectionString));
+        services.AddSqlServerWithContextPool<AppDbSession>(p => p.GetRequiredService<IAppConfig>().ConnectionString);
+    } else if (key.StartsWith("postgres")) {
+        services.AddConfig<IAppConfig, Postgres.AppConfig>();
+        services.AddSingleton<IExecuteScriptFile, ExecuteScriptFile>();
+        services.AddScoped(p => new AppPostgresMigration(p.GetRequiredService<IAppConfig>().ConnectionString));
+        services.AddPostgresWithContextPool<AppDbSession>(p => p.GetRequiredService<IAppConfig>().ConnectionString);
+    }
+    services.RegisterCommands();
+}
 ```
 
-**Run deployment scripts before migration:**
+### Adding a migration
+
 ```shell
-Sample.Admin.exe sql execute-migration-scripts --directory ./scripts --pre-migration
+dotnet ef migrations add <MigrationName> --context AppSqlServerMigration --output-dir Migrations/SqlServer
+dotnet ef migrations add <MigrationName> --context AppPostgresMigration  --output-dir Migrations/Postgres
 ```
-Scripts in `./scripts/<version>/` run only when a pending migration exists and the version matches the assembly version.
+
+### Running migrations and scripts
+
+```shell
+# Apply pending migrations
+App.Admin.exe sql ef-migrate
+App.Admin.exe pg  ef-migrate
+
+# Generate SQL script for review
+App.Admin.exe sql create-script
+App.Admin.exe pg  create-script
+
+# Run deployment scripts (only if pending migrations exist and version matches)
+App.Admin.exe sql exec-script --directory ./scripts --pre-migration
+App.Admin.exe pg  exec-script --directory ./scripts --pre-migration
+```
 
 ---
 
