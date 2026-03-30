@@ -1,5 +1,4 @@
-﻿using Albatross.Authentication;
-using Albatross.CommandLine;
+﻿using Albatross.CommandLine;
 using Albatross.CommandLine.Defaults;
 using Albatross.Config;
 using Albatross.EFCore.Admin;
@@ -10,10 +9,12 @@ using Microsoft.Extensions.Hosting;
 using Crm.Models;
 using System.CommandLine;
 using System.Threading.Tasks;
+using Crm.Services;
 
 namespace Crm.Admin {
 	internal class Program {
 		static async Task<int> Main(string[] args) {
+			Albatross.Logging.Extensions.RemoveLegacySlackSinkOptions();
 			if (Microsoft.EntityFrameworkCore.EF.IsDesignTime) {
 				await new HostBuilder().Build().RunAsync();
 				return 0;
@@ -28,7 +29,7 @@ namespace Crm.Admin {
 			}
 		}
 		static void RegisterServices(ParseResult result, IServiceCollection services) {
-			services.AddCrmDbSession();
+			services.AddCrmDbSession().AddCrm();
 			var key = result.CommandResult.Command.GetCommandKey();
 			if (key.StartsWith("sqlserver")) {
 				services.AddConfig<ICrmConfig, Crm.Models.SqlServer.CrmConfig>();

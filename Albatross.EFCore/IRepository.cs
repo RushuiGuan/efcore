@@ -12,6 +12,8 @@ namespace Albatross.EFCore {
 
 	public interface IRepository {
 		Task<SaveResults> SaveChangesAsync(CancellationToken cancellationToken);
+		void Delete<T>(T entity) where T : class;
+		void Add<T>(T entity) where T : class;
 	}
 
 	public abstract class Repository<T> : IRepository where T : IDbSession {
@@ -38,6 +40,13 @@ namespace Albatross.EFCore {
 					ForeignKeyConflict = hasForeignKeyConflict,
 				};
 			}
+		}
+
+		public void Delete<Entity>(Entity entity) where Entity : class {
+			this.session.DbContext.Set<Entity>().Remove(entity);
+		}
+		public void Add<Entity>(Entity entity) where Entity : class {
+			this.session.DbContext.Set<Entity>().Add(entity);
 		}
 	}
 }

@@ -8,10 +8,8 @@ Albatross.EFCore.AutoCacheEviction
 Albatross.EFCore.PostgreSQL
 Albatross.EFCore.SqlServer
 Albatross.EFCore.Admin
-Albatross.EFCore.Testing
 
 # tests
-# Albatross.EFCore.IntegrationTest
 
 # apps
-Sample.Admin
+Crm.Admin

@@ -6,7 +6,7 @@ namespace Crm.Admin {
 		public CrmPostgresMigration() : this("any") { }
 
 		public CrmPostgresMigration(string connectionString)
-			: base(Albatross.EFCore.PostgreSQL.Extensions.BuildMigrationOption<CrmDbSession>(My.Schema.Sample, connectionString)) {
+			: base(Albatross.EFCore.PostgreSQL.Extensions.BuildMigrationOption<CrmDbSession>(Constants.Schema, connectionString)) {
 		}
 	}
 }

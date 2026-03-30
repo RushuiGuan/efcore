@@ -17,8 +17,7 @@
   <Project Path="Albatross.EFCore.CodeGen/Albatross.EFCore.CodeGen.csproj" />
   <Project Path="Albatross.EFCore.PostgreSQL/Albatross.EFCore.PostgreSQL.csproj" />
   <Project Path="Albatross.EFCore.SqlServer/Albatross.EFCore.SqlServer.csproj" />
-  <Project Path="Albatross.EFCore.Testing/Albatross.EFCore.Testing.csproj" />
   <Project Path="Albatross.EFCore/Albatross.EFCore.csproj" />
   <Project Path="Crm.Admin\Crm.Admin.csproj" />
-  <Project Path="Crm.Models\Crm.Models.csproj" />
+  <Project Path="Crm/Crm.csproj" />
 </Solution>

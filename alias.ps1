@@ -1,7 +1,5 @@
 if ($IsMacOS) {
-	set-alias -n admin -v (Join $env:InstallDirectory, "Sample.Admin", "Sample.Admin");
-	set-alias -n test -v (Join $env:InstallDirectory, "Albatross.EFCore.IntegrationTest", "Albatross.EFCore.IntegrationTest");
+	set-alias -n admin -v (Join $env:InstallDirectory, "Crm.Admin", "Crm.Admin");
 } else {
-	set-alias -n admin -v (Join $env:InstallDirectory, "Sample.Admin", "Sample.Admin.exe");
-	set-alias -n test -v (Join $env:InstallDirectory, "Albatross.EFCore.IntegrationTest", "Albatross.EFCore.IntegrationTest.exe");
+	set-alias -n admin -v (Join $env:InstallDirectory, "Crm.Admin", "Crm.Admin.exe");
 }
