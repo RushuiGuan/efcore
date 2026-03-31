@@ -4,9 +4,11 @@ using Albatross.Config;
 using Albatross.EFCore.Admin;
 using Albatross.EFCore.PostgreSQL;
 using Albatross.EFCore.SqlServer;
+using Albatross.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Crm.Models;
+using Serilog;
 using System.CommandLine;
 using System.Threading.Tasks;
 using Crm.Services;
@@ -23,7 +25,15 @@ namespace Crm.Admin {
 					.RegisterServices(RegisterServices)
 					.AddCommands()
 					.Parse(args)
-					.WithDefaults()
+					.WithConfig()
+					.ConfigureHost(builder => {
+						builder.UseSerilog();
+						builder.ConfigureLogging((context, logging) => {
+							var setupSerilog = new SetupSerilog();
+							setupSerilog.UseConfigFile(EnvironmentSetting.DOTNET_ENVIRONMENT.Value, null, null, true);
+							setupSerilog.Create();
+						});
+					})
 					.Build();
 				return await host.InvokeAsync();
 			}
