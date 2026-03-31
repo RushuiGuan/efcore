@@ -1,10 +1,13 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Albatross.EFCore {
 	public record SaveResults {
+		[MemberNotNullWhen(true, nameof(Error))]
 		public bool Success { get; init; }
+
 		public bool NameConflict { get; init; }
 		public bool ForeignKeyConflict { get; init; }
 		public Exception? Error { get; init; }
@@ -41,12 +44,11 @@ namespace Albatross.EFCore {
 				};
 			}
 		}
-
-		public void Delete<Entity>(Entity entity) where Entity : class {
-			this.session.DbContext.Set<Entity>().Remove(entity);
+		public void Delete<TEntity>(TEntity entity) where TEntity : class {
+			this.session.DbContext.Set<TEntity>().Remove(entity);
 		}
-		public void Add<Entity>(Entity entity) where Entity : class {
-			this.session.DbContext.Set<Entity>().Add(entity);
+		public void Add<TEntity>(TEntity entity) where TEntity : class {
+			this.session.DbContext.Set<TEntity>().Add(entity);
 		}
 	}
 }
