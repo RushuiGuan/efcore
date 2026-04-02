@@ -138,7 +138,7 @@ Extend `DbSession` (or `DbSessionWithEventHandlers` if you need the event system
 
 ```csharp
 public class SampleDbSession : DbSession {
-    public SampleDbSession(DbContextOptions<SampleDbSession> options) : base(options) { }
+    public SampleDbSession(DbContextOptions options) : base(options) { }
 
     public DbSet<Address> Addresses => Set<Address>();
 
@@ -148,6 +148,8 @@ public class SampleDbSession : DbSession {
     }
 }
 ```
+
+> **String encoding default**: `DbSession` overrides `ConfigureConventions` to make all `string` properties **non-unicode (varchar)** by default. This assumes a UTF-8 database collation. If you need a specific column to use nvarchar, apply `.IsUnicode(true)` in the entity map or override `ConfigureConventions` globally.
 
 Use `DbSessionWithEventHandlers` when you need pre/post-save hooks (e.g., audit):
 
@@ -377,10 +379,10 @@ public class CompanyRepository : Repository<ICrmDbSession>, ICompanyRepository {
     public override bool IsForeignKeyConstraintViolation(Exception err) => ...;
 
     public Task<List<Company>> GetAll(CancellationToken cancellationToken) =>
-        session.Set<Company>().ToListAsync(cancellationToken);
+        session.DbContext.Set<Company>().ToListAsync(cancellationToken);
 
     public Task<Company?> GetById(Guid id, CancellationToken cancellationToken) =>
-        session.Set<Company>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        session.DbContext.Set<Company>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 }
 
 // Service — depends on ICompanyRepository, never on the DbSession
