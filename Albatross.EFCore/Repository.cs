@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Albatross.EFCore {
 	public record SaveResults {
-		[MemberNotNullWhen(true, nameof(Error))]
-		public bool Success { get; init; }
+		[MemberNotNullWhen(false, nameof(Error))]
+		public bool Success => Error == null;
 
 		public bool NameConflict { get; init; }
 		public bool ForeignKeyConflict { get; init; }
@@ -14,7 +14,7 @@ namespace Albatross.EFCore {
 	}
 
 	public interface IRepository {
-		Task<SaveResults> SaveChangesAsync(CancellationToken cancellationToken);
+		Task<SaveResults> SaveChangesAsync(bool throwException, CancellationToken cancellationToken);
 		void Delete<T>(T entity) where T : class;
 		void Add<T>(T entity) where T : class;
 	}
@@ -26,19 +26,21 @@ namespace Albatross.EFCore {
 		}
 		public abstract bool IsUniqueConstraintViolation(Exception err);
 		public abstract bool IsForeignKeyConstraintViolation(Exception err);
-		public async Task<SaveResults> SaveChangesAsync(CancellationToken cancellationToken) {
+		public async Task<SaveResults> SaveChangesAsync(bool throwException, CancellationToken cancellationToken) {
 			try {
 				await session.SaveChangesAsync(cancellationToken);
-				return new SaveResults() { Success = true };
+				return new SaveResults();
 			} catch (Exception err) {
+				if (throwException) {
+					throw;
+				}
 				bool hasNameConflict = IsUniqueConstraintViolation(err);
 				bool hasForeignKeyConflict = false;
 				if (!hasNameConflict) {
 					hasForeignKeyConflict = IsForeignKeyConstraintViolation(err);
 				}
 				return new SaveResults {
-					Success = false,
-					Error = err,
+					Error = err.InnerException ?? err,
 					NameConflict = hasNameConflict,
 					ForeignKeyConflict = hasForeignKeyConflict,
 				};

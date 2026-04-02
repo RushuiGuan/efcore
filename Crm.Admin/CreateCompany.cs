@@ -37,7 +37,7 @@ namespace Crm.Admin {
 				Description = parameters.Description
 			};
 			var company = service.CreateNewCompany(request);
-			var saved = await repository.SaveChangesAsync(cancellationToken);
+			var saved = await repository.SaveChangesAsync(false, cancellationToken);
 			if (saved.Success) {
 				this.Writer.CliPrintWithExpression(company, parameters.Format);
 				return 0;
