@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.Audit</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Albatross.Authentication" Version="8.1.0" />

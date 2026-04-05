@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.ChangeReporting</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Albatross.EFCore.Audit\Albatross.EFCore.Audit.csproj" />

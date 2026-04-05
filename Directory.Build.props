@@ -6,7 +6,7 @@
 		<LangVersion>Latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<RepositoryUrl>https://github.com/RushuiGuan/efcore</RepositoryUrl>
-		<PackageProjectUrl>https://rushuiguan.github.io/efcore/</PackageProjectUrl>
+		<PackageProjectUrl>https://rushuiguan.github.io/efcore</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
 		<Authors>Rushui Guan</Authors>

@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<Description>SqlServer Setup for Albatross.EFCore</Description>
-		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.SqlServer</PackageProjectUrl>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>

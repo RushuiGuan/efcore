@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.AutoCacheEviction</PackageProjectUrl>
 		<PackageIcon>icon.png</PackageIcon>
 	</PropertyGroup>
 	<ItemGroup>

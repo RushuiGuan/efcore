@@ -4,7 +4,6 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>Latest</LangVersion>
 		<Nullable>Enable</Nullable>
-		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore.CodeGen</PackageProjectUrl>
 		<Description>A companion code generator used by the Albatross.EFCore library</Description>
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<PackageTags>Analyzer;Roslyn</PackageTags>

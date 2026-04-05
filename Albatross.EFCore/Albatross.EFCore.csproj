@@ -4,7 +4,6 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<Description>This assembly contains convenient classes that allow users to get EFCore up and running quickly.  It also contains entity ChangeReporting functionality and implementation of DateLevelEntity pattern.</Description>
 		<Nullable>enable</Nullable>
-		<PackageProjectUrl>$(RepositoryProjectRoot)/Albatross.EFCore</PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.5" />
