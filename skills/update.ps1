@@ -1,1 +1,0 @@
-Copy-Item ~/.claude/skills/alba-efcore -Destination $PSScriptRoot -Recurse -Force;
