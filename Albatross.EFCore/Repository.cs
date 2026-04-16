@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace Albatross.EFCore {
 
 	public interface IRepository {
 		Task<SaveResults> SaveChangesAsync(bool throwException, CancellationToken cancellationToken);
-		void Delete<T>(T entity) where T : class;
-		void Add<T>(T entity) where T : class;
+		void Add<T>(params IEnumerable<T> entity) where T : class;
+		void Delete<T>(params IEnumerable<T> entity) where T : class;
 	}
 
 	public abstract class Repository<T> : IRepository where T : IDbSession {
@@ -46,11 +47,11 @@ namespace Albatross.EFCore {
 				};
 			}
 		}
-		public void Delete<TEntity>(TEntity entity) where TEntity : class {
-			this.session.DbContext.Set<TEntity>().Remove(entity);
+		public void Add<TEntity>(params IEnumerable<TEntity> entity) where TEntity : class {
+			this.session.DbContext.Set<TEntity>().AddRange(entity);
 		}
-		public void Add<TEntity>(TEntity entity) where TEntity : class {
-			this.session.DbContext.Set<TEntity>().Add(entity);
+		public void Delete<TEntity>(params IEnumerable<TEntity> entity) where TEntity : class {
+			this.session.DbContext.Set<TEntity>().RemoveRange(entity);
 		}
 	}
 }
