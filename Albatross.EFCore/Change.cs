@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace Albatross.EFCore {
+	[Flags]
 	public enum ChangeType {
 		Added = 1,
 		Deleted = 2,
