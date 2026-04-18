@@ -5,7 +5,6 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Albatross.EFCore.Audit\Albatross.EFCore.Audit.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore\Albatross.EFCore.csproj" />
 	</ItemGroup>
 	<ItemGroup>

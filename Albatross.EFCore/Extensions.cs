@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -74,12 +72,6 @@ namespace Albatross.EFCore {
 		public static PropertyBuilder<DateTime?> UtcDateTimeProperty(this PropertyBuilder<DateTime?> builder) {
 			builder.HasConversion(value => value, item => item.HasValue ? DateTime.SpecifyKind(item.Value, DateTimeKind.Utc) : null);
 			return builder;
-		}
-
-		public static IServiceCollection AddDbSessionEvents(this IServiceCollection services) {
-			services.TryAddScoped<IDbEventSession, DbEventSession>();
-			services.TryAddSingleton<IDbEventSessionProvider, DbEventSessionProvider>();
-			return services;
 		}
 	}
 }

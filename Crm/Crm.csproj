@@ -8,7 +8,6 @@
 	<ItemGroup>
 		<PackageReference Include="Albatross.Config" Version="7.5.11" />
 		<PackageReference Include="Albatross.Text" Version="9.0.3" />
-		<ProjectReference Include="..\Albatross.EFCore.Audit\Albatross.EFCore.Audit.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.ChangeReporting\Albatross.EFCore.ChangeReporting.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.PostgreSQL\Albatross.EFCore.PostgreSQL.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.SqlServer\Albatross.EFCore.SqlServer.csproj" />
