@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace Albatross.EFCore {
 	/// <summary>
-	/// Represent a database session.  Has a open database connection and should be disposed when done
+	/// Represents an open database session — a unit of work over a live <see cref="IDbConnection"/>.
+	/// Dispose when the request or operation scope is complete.
 	/// </summary>
+	/// <remarks>
+	/// In the Albatross layered architecture, only repositories depend on <see cref="IDbSession"/>.
+	/// Services depend on repository interfaces and must never reference <see cref="IDbSession"/> directly.
+	/// </remarks>
 	public interface IDbSession : IDisposable {
 		IDbConnection DbConnection { get; }
 		DbContext DbContext { get; }

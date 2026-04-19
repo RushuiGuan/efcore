@@ -1,4 +1,8 @@
-﻿namespace Albatross.EFCore {
+namespace Albatross.EFCore {
+	/// <summary>
+	/// A per-property snapshot of a single entity change, emitted by
+	/// <see cref="ChangeReportInterceptor{TEntity}"/> after a successful save.
+	/// </summary>
 	public class ChangeReport<T> where T : class {
 		public ChangeReport(T entity, ChangeType type, string property) {
 			Entity = entity;

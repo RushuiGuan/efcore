@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace Albatross.EFCore {
 	/// <summary>
-	/// This interceptor should be registered as a scoped service. It collects changes of type TEntity during SaveChanges and generates a report after changes are saved successfully.
+	/// EF Core save interceptor that triggers cache eviction for modified or deleted entities.
+	/// Register as a scoped service; configure <see cref="ShouldEvict"/> and <see cref="Evict"/>
+	/// before the first save in the scope.
 	/// </summary>
 	public class CacheEvictionInterceptor : SaveChangesInterceptor {
 		public CacheEvictionInterceptor(ILogger<CacheEvictionInterceptor> logger) {
@@ -16,7 +18,17 @@ namespace Albatross.EFCore {
 		}
 
 		private readonly ILogger<CacheEvictionInterceptor> logger;
+
+		/// <summary>
+		/// Predicate that determines whether a changed entity's cache entry should be evicted.
+		/// Evaluated before the save completes so you can filter by entity type or state.
+		/// </summary>
 		public required Func<CacheEvictionItem, bool> ShouldEvict { get; init; }
+
+		/// <summary>
+		/// Required callback invoked after a successful save with all items that passed <see cref="ShouldEvict"/>.
+		/// Errors are caught and logged; cache failures do not roll back the save.
+		/// </summary>
 		public required Func<IEnumerable<CacheEvictionItem>, ValueTask> Evict { get; init; }
 		private readonly List<CacheEvictionItem> changes = new();
 

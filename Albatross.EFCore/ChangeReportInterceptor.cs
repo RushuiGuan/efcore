@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace Albatross.EFCore {
 	/// <summary>
-	/// This interceptor should be registered as a scoped service. It collects changes of type TEntity during SaveChanges and generates a report after changes are saved successfully.
+	/// EF Core save interceptor that captures per-property changes for <typeparamref name="TEntity"/>
+	/// and invokes <see cref="OnReportGenerated"/> after each successful save.
+	/// Register as a scoped service so each request gets its own isolated change list.
 	/// </summary>
-	/// <typeparam name="TEntity"></typeparam>
 	public class ChangeReportInterceptor<TEntity> : SaveChangesInterceptor where TEntity : class {
 		private readonly ILogger<ChangeReportInterceptor<TEntity>> logger;
 
@@ -20,8 +21,15 @@ namespace Albatross.EFCore {
 			this.logger = logger;
 		}
 
+		/// <summary>
+		/// Controls which entity state transitions are tracked. Defaults to <see cref="ChangeType.All"/>.
+		/// </summary>
 		public ChangeType ChangeType { get; init; } = ChangeType.All;
 
+		/// <summary>
+		/// Predicate applied to each EF Core property to exclude it from reporting.
+		/// By default, concurrency tokens are skipped.
+		/// </summary>
 		public Func<IProperty, bool> ShouldSkip { get; init; } = property => {
 			if (property.IsConcurrencyToken) {
 				return true;
@@ -30,6 +38,11 @@ namespace Albatross.EFCore {
 			}
 		};
 
+		/// <summary>
+		/// Required callback invoked with the full change list after each successful save.
+		/// Only called when at least one change was tracked; errors are caught and logged
+		/// without rolling back the save.
+		/// </summary>
 		public required Func<List<ChangeReport<TEntity>>, ValueTask> OnReportGenerated { get; init; }
 		private readonly List<ChangeReport<TEntity>> changes = new();
 

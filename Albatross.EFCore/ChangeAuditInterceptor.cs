@@ -8,6 +8,24 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Albatross.EFCore {
+	/// <summary>
+	/// EF Core save interceptor that writes a <typeparamref name="TChangeEntity"/> audit record for every
+	/// <see cref="IAuditable{TEntityId}"/> entity that is modified or deleted in the same transaction.
+	/// Added entities are intentionally excluded — only modifications and deletions are audited.
+	/// </summary>
+	/// <typeparam name="TChangeEntity">The audit-log entity type; must derive from <see cref="Change{TEntityId, TActorId}"/>.</typeparam>
+	/// <typeparam name="TEntityId">Primary-key type of the audited entities.</typeparam>
+	/// <typeparam name="TActorId">Type used to identify who performed the change (e.g. <c>string</c> for a username).</typeparam>
+	/// <remarks>
+	/// Register the interceptor as a scoped service and wire it into <see cref="DbContextOptions"/>:
+	/// <code>
+	/// services.AddScoped&lt;ChangeAuditInterceptor&lt;AuditLog, int, string&gt;&gt;();
+	/// services.AddDbContext&lt;MyDbSession&gt;((sp, options) =&gt; {
+	///     options.AddInterceptors(sp.GetRequiredService&lt;ChangeAuditInterceptor&lt;AuditLog, int, string&gt;&gt;());
+	/// });
+	/// </code>
+	/// Requires <see cref="IGetCurrentActorId{T}"/> and <see cref="TimeProvider"/> in DI.
+	/// </remarks>
 	public class ChangeAuditInterceptor<TChangeEntity, TEntityId, TActorId> : SaveChangesInterceptor where TChangeEntity: Change<TEntityId, TActorId>, new() {
 		private readonly IGetCurrentActorId<TActorId> getCurrentActorId;
 		private readonly TimeProvider timeProvider;
@@ -17,6 +35,7 @@ namespace Albatross.EFCore {
 			this.timeProvider = timeProvider;
 		}
 
+		/// <summary>Captures the before/after values of a single property in the JSON snapshot.</summary>
 		public class ChangedProperty {
 			public object? Original { get; init; }
 			public object? Current { get; init; }
