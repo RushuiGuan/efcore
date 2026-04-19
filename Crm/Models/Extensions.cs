@@ -1,4 +1,5 @@
-using Albatross.EFCore.ChangeReporting;
+using Albatross.EFCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Crm.Models {
@@ -6,25 +7,16 @@ namespace Crm.Models {
 		public static IServiceCollection AddCrmDbSession(this IServiceCollection services) {
 			services.AddScoped<ICrmDbSession>(provider => provider.GetRequiredService<CrmDbSession>())
 				.AddScoped<ICompanyRepository, CompanyRepository>();
+			services.AddSingleton<ChangeAuditInterceptor<Audit, Guid, Guid>>();
 			return services;
+		}
+		
+		public static DbContextOptionsBuilder AddCustomInterceptors(this DbContextOptionsBuilder optionsBuilder, IServiceProvider serviceProvider) {
+			optionsBuilder.AddInterceptors(serviceProvider.GetRequiredService<ChangeAuditInterceptor<Audit, Guid, Guid>>());
+			return optionsBuilder;
 		}
 
 		public static IServiceCollection AddChangeReporting(this IServiceCollection services) {
-			services.AddChangeReporting(new ChangeReportBuilder<Contact> {
-				Type = ChangeType.All,
-				Prefix = "``` start\n",
-				Postfix = "```",
-				FixedHeaders = [nameof(Contact.Id)],
-				OnReportGenerated = text => Console.Out.WriteLineAsync(text)
-			}.ExcludeAuditProperties());
-
-			services.AddChangeReporting(new ChangeReportBuilder<Address> {
-				Type = ChangeType.All,
-				Prefix = "``` start\n",
-				Postfix = "```",
-				FixedHeaders = [nameof(Address.Id)],
-				OnReportGenerated = text => Console.Out.WriteLineAsync(text)
-			});
 			return services;
 		}
 	}

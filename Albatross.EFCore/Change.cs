@@ -20,11 +20,11 @@ namespace Albatross.EFCore {
 	/// Persisted to the database by <see cref="ChangeAuditInterceptor{TChangeEntity, TEntityId, TActorId}"/>.
 	/// </summary>
 	public class Change<TEntityId, TActorId> {
-		public required TEntityId EntityId { get; init; }
-		public required TActorId ActorId { get; init; }
-		public required DateTime UtcTimeStamp { get; init; }
-		public required ChangeType ChangeType { get; init; }
-		public required string EntityType { get; init; }
+		public TEntityId EntityId { get; init; } = default!;
+		public TActorId ActorId { get; init; } = default!;
+		public DateTime UtcTimeStamp { get; init; }
+		public ChangeType ChangeType { get; init; }
+		public string EntityType { get; init; } = string.Empty;
 
 		/// <summary>
 		/// JSON snapshot of the changed properties. For <see cref="ChangeType.Deleted"/> records, contains

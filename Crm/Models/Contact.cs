@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
 
 namespace Crm.Models {
-	public class Contact {
+	public class Contact : IAuditable<Guid> {
 		public required Guid Id { get; init; }
 
 		public required Guid CompanyId { get; set; }

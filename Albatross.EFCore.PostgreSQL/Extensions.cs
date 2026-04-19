@@ -6,7 +6,7 @@ using System;
 
 namespace Albatross.EFCore.PostgreSQL {
 	public static class Extensions {
-		public static void DefaultDbContextOptionBuilder(NpgsqlDbContextOptionsBuilder builder) {
+		public static void DefaultNpgSqlDbContextOptionBuilder(NpgsqlDbContextOptionsBuilder builder) {
 			builder.CommandTimeout(100);
 		}
 
@@ -14,7 +14,7 @@ namespace Albatross.EFCore.PostgreSQL {
 			builder.EnableDetailedErrors(true);
 			builder.EnableSensitiveDataLogging(true);
 			builder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
-			builder.UseNpgsql(connectionString, dbcontextOptionBuilder ?? DefaultDbContextOptionBuilder);
+			builder.UseNpgsql(connectionString, dbcontextOptionBuilder ?? DefaultNpgSqlDbContextOptionBuilder);
 			builder.UseLowerCaseNamingConvention();
 		}
 
@@ -31,13 +31,13 @@ namespace Albatross.EFCore.PostgreSQL {
 			return builder.Options;
 		}
 
-		public static IServiceCollection AddPostgres<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
-			services.AddDbContext<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder));
+		public static IServiceCollection AddPostgres<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? npgSqlDbcontextOptionBuilder = null) where T : DbContext {
+			services.AddDbContext<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), npgSqlDbcontextOptionBuilder ?? DefaultNpgSqlDbContextOptionBuilder));
 			return services;
 		}
 
-		public static IServiceCollection AddPostgresWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? dbcontextOptionBuilder = null) where T : DbContext {
-			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), dbcontextOptionBuilder ?? DefaultDbContextOptionBuilder));
+		public static IServiceCollection AddPostgresWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? npgSqlDbcontextOptionBuilder = null) where T : DbContext {
+			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), npgSqlDbcontextOptionBuilder ?? DefaultNpgSqlDbContextOptionBuilder));
 			return services;
 		}
 

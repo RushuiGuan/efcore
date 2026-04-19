@@ -1,4 +1,12 @@
-- name: Introduction
-  href: introduction.md
 - name: Getting Started
   href: getting-started.md
+- name: Introduction
+  href: instruction.md
+- name: Unit of Work
+  href: unit-of-work.md
+- name: Audit
+  href: audit.md
+- name: Change Reporting
+  href: change-reporting.md
+- name: Cache Eviction
+  href: cache-eviction.md
