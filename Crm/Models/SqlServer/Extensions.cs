@@ -10,8 +10,6 @@ public static class Extensions {
 	public static IServiceCollection AddSqlServerSampleDbSession(this IServiceCollection services) {
 		services.AddConfig<CrmConfig>();
 		services.AddCrmDbSession();
-		return services.AddSqlServerWithContextPool<CrmDbSession>(
-			provider => provider.GetRequiredService<CrmConfig>().ConnectionString, 
-			builder=>(DbContextOptionsBuilder)builder.AddCustomInterceptors());
+		return services.AddSqlServerWithContextPool<CrmDbSession>(provider => provider.GetRequiredService<CrmConfig>().ConnectionString);
 	}
 }

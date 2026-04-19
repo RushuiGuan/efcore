@@ -1,35 +1,35 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Albatross.EFCore.SqlServer {
 	public static class Extensions {
-		public static void DefaultSqlServerDbContextOptionBuilder(SqlServerDbContextOptionsBuilder builder) {
-			builder.CommandTimeout(100);
-		}
-
-		public static void BuildDefaultOption(this DbContextOptionsBuilder builder, string connectionString, Action<SqlServerDbContextOptionsBuilder>? sqlserverDbcontextOptionBuilder = null) {
+		public static void BuildDefaultDevEFCoreOptions(this DbContextOptionsBuilder builder,
+			string connectionString,
+			IServiceProvider serviceProvider) {
 			builder.EnableDetailedErrors(true);
 			builder.EnableSensitiveDataLogging(true);
 			builder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
-			builder.UseSqlServer(connectionString, sqlserverDbcontextOptionBuilder ?? DefaultSqlServerDbContextOptionBuilder);
+			builder.UseSqlServer(connectionString, x => x.CommandTimeout(100));
 		}
 
 		public static DbContextOptions<T> BuildMigrationOption<T>(string historyTableSchema, string connectionString = DbSession.Any) where T : DbContext {
 			var builder = new DbContextOptionsBuilder<T>();
 			builder.EnableDetailedErrors(true);
 			builder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
-			builder.UseSqlServer(connectionString, opt => {
-				opt.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
-				opt.MigrationsHistoryTable(DbSession.EFMigrationHistory, historyTableSchema);
-			});
+			builder.UseSqlServer(connectionString,
+				opt => {
+					opt.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
+					opt.MigrationsHistoryTable(DbSession.EFMigrationHistory, historyTableSchema);
+				});
 			return builder.Options;
 		}
 
-		public static IServiceCollection AddSqlServer<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<IServiceProvider, DbContextOptionsBuilder>? dbContextOptionBuilder = null, Action<SqlServerDbContextOptionsBuilder>? sqlServerDbContextOptionBuilder = null) where T : DbContext {
-			services.AddDbContext<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), sqlServerDbContextOptionBuilder ?? DefaultSqlServerDbContextOptionBuilder));
+		public static IServiceCollection AddSqlServer<T>(this IServiceCollection services,
+			Func<IServiceProvider, string> getConnectionString)
+			where T : DbContext {
+			services.AddDbContext<T>((provider, builder) => BuildDefaultDevEFCoreOptions(builder, getConnectionString(provider), provider));
 			return services;
 		}
 
@@ -39,8 +39,9 @@ namespace Albatross.EFCore.SqlServer {
 		/// As an alternative, access the database using an user with only readonly permission
 		/// </summary>
 		/// <returns></returns>
-		public static IServiceCollection AddSqlServerWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<IServiceProvider, DbContextOptionsBuilder>? dbContextOptionBuilder = null, Action<SqlServerDbContextOptionsBuilder>? sqlServerDbContextOptionBuilder = null) where T : DbContext {
-			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), sqlServerDbContextOptionBuilder ?? DefaultSqlServerDbContextOptionBuilder));
+		public static IServiceCollection AddSqlServerWithContextPool<T>(this IServiceCollection services,
+			Func<IServiceProvider, string> getConnectionString) where T : DbContext {
+			services.AddDbContextPool<T>((provider, builder) => BuildDefaultDevEFCoreOptions(builder, getConnectionString(provider), provider));
 			return services;
 		}
 

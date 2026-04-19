@@ -6,15 +6,11 @@ using System;
 
 namespace Albatross.EFCore.PostgreSQL {
 	public static class Extensions {
-		public static void DefaultNpgSqlDbContextOptionBuilder(NpgsqlDbContextOptionsBuilder builder) {
-			builder.CommandTimeout(100);
-		}
-
-		public static void BuildDefaultOption(DbContextOptionsBuilder builder, string connectionString, Action<NpgsqlDbContextOptionsBuilder>? dbcontextOptionBuilder = null) {
+		public static void BuildDefaultOption(DbContextOptionsBuilder builder, string connectionString, IServiceProvider provider) {
 			builder.EnableDetailedErrors(true);
 			builder.EnableSensitiveDataLogging(true);
 			builder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
-			builder.UseNpgsql(connectionString, dbcontextOptionBuilder ?? DefaultNpgSqlDbContextOptionBuilder);
+			builder.UseNpgsql(connectionString, x => x.CommandTimeout(100));
 			builder.UseLowerCaseNamingConvention();
 		}
 
@@ -22,35 +18,25 @@ namespace Albatross.EFCore.PostgreSQL {
 			var builder = new DbContextOptionsBuilder<T>();
 			builder.EnableDetailedErrors(true);
 			builder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
-			builder.UseNpgsql(connectionString, opt => {
-				opt.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
-				// without this, efcore will create the historyTable using the default schema public
-				opt.MigrationsHistoryTable(DbSession.EFMigrationHistory, historyTableSchema);
-			});
+			builder.UseNpgsql(connectionString,
+				opt => {
+					opt.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
+					// without this, efcore will create the historyTable using the default schema public
+					opt.MigrationsHistoryTable(DbSession.EFMigrationHistory, historyTableSchema);
+				});
 			builder.UseLowerCaseNamingConvention();
 			return builder.Options;
 		}
 
-		public static IServiceCollection AddPostgres<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? npgSqlDbcontextOptionBuilder = null) where T : DbContext {
-			services.AddDbContext<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), npgSqlDbcontextOptionBuilder ?? DefaultNpgSqlDbContextOptionBuilder));
+		public static IServiceCollection AddPostgres<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? npgSqlDbcontextOptionBuilder = null)
+			where T : DbContext {
+			services.AddDbContext<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), provider));
 			return services;
 		}
 
-		public static IServiceCollection AddPostgresWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString, Action<NpgsqlDbContextOptionsBuilder>? npgSqlDbcontextOptionBuilder = null) where T : DbContext {
-			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), npgSqlDbcontextOptionBuilder ?? DefaultNpgSqlDbContextOptionBuilder));
+		public static IServiceCollection AddPostgresWithContextPool<T>(this IServiceCollection services, Func<IServiceProvider, string> getConnectionString) where T : DbContext {
+			services.AddDbContextPool<T>((provider, builder) => BuildDefaultOption(builder, getConnectionString(provider), provider));
 			return services;
-		}
-
-		// 23505: unique_violation
-		public static bool IsUniqueConstraintViolation(this Exception err) {
-			var pgEx = err as PostgresException ?? err.InnerException as PostgresException;
-			return pgEx?.SqlState == "23505";
-		}
-
-		// 23503: foreign_key_violation
-		public static bool IsForeignKeyConstraintViolation(this Exception err) {
-			var pgEx = err as PostgresException ?? err.InnerException as PostgresException;
-			return pgEx?.SqlState == "23503";
 		}
 	}
 }

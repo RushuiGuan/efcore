@@ -1,5 +1,6 @@
 using Albatross.EFCore;
 using Microsoft.EntityFrameworkCore;
+using ExceptionExtensions = Albatross.EFCore.PostgreSQL.ExceptionExtensions;
 using PostgresExt = Albatross.EFCore.PostgreSQL.Extensions;
 using SqlServerExt = Albatross.EFCore.SqlServer.Extensions;
 
@@ -14,10 +15,10 @@ namespace Crm.Models {
 		public CompanyRepository(ICrmDbSession session) : base(session) { }
 
 		public override bool IsUniqueConstraintViolation(Exception err) =>
-			SqlServerExt.IsUniqueConstraintViolation(err) || PostgresExt.IsUniqueConstraintViolation(err);
+			SqlServerExt.IsUniqueConstraintViolation(err) || ExceptionExtensions.IsUniqueConstraintViolation(err);
 
 		public override bool IsForeignKeyConstraintViolation(Exception err) =>
-			SqlServerExt.IsForeignKeyConstraintViolation(err) || PostgresExt.IsForeignKeyConstraintViolation(err);
+			SqlServerExt.IsForeignKeyConstraintViolation(err) || ExceptionExtensions.IsForeignKeyConstraintViolation(err);
 
 		public Task<List<Company>> GetAll(CancellationToken cancellationToken) =>
 			session.DbContext.Set<Company>().ToListAsync(cancellationToken);

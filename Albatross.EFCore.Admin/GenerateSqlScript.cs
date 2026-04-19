@@ -30,7 +30,7 @@ namespace Albatross.EFCore.Admin {
 		}
 		public TextWriter Writer => parseResult.InvocationConfiguration.Output;
 		public Task<int> InvokeAsync(CancellationToken cancellationToken) {
-			string script = session.GetCreateScript();
+			string script = session.DbContext.Database.GenerateCreateScript();
 			using (var reader = new StringReader(script)) {
 				string content = reader.ReadToEnd();
 				this.Writer.WriteLine(content);
