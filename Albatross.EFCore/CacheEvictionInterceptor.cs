@@ -1,40 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Albatross.EFCore.AutoCacheEviction {
+namespace Albatross.EFCore {
 	/// <summary>
 	/// This interceptor should be registered as a scoped service. It collects changes of type TEntity during SaveChanges and generates a report after changes are saved successfully.
 	/// </summary>
-	/// <typeparam name="TEntity"></typeparam>
-	public class AutoCacheEvictionInterceptor  : SaveChangesInterceptor {
-		public required Func<List<ChangeReport<TEntity>>, ValueTask> OnReportGenerated { get; init; }
-		private readonly List<ChangeReport<TEntity>> changes = new();
+	public class CacheEvictionInterceptor : SaveChangesInterceptor {
+		public CacheEvictionInterceptor(ILogger<CacheEvictionInterceptor> logger) {
+			this.logger = logger;
+		}
+
+		private readonly ILogger<CacheEvictionInterceptor> logger;
+		public required Func<CacheEvictionItem, bool> ShouldEvict { get; init; }
+		public required Func<IEnumerable<CacheEvictionItem>, ValueTask> Evict { get; init; }
+		private readonly List<CacheEvictionItem> changes = new();
 
 		void CollectChanges(DbContext context) {
 			this.changes.Clear();
 			foreach (var entry in context.ChangeTracker.Entries()) {
-				if (entry.Entity is TEntity entity) {
-					if (entry.State == EntityState.Modified && (ChangeType & ChangeType.Modified) != 0) {
-						changes.AddRange(entry.Properties
-							.Where(args => !ShouldSkip(args.Metadata) && args.IsModified)
-							.Select(args => new ChangeReport<TEntity>(entity, ChangeType.Modified, args.Metadata.Name) {
-								OldValue = args.OriginalValue,
-								NewValue = args.CurrentValue,
-							}));
-					} else if (entry.State == EntityState.Deleted && (ChangeType & ChangeType.Deleted) != 0) {
-						changes.AddRange(entry.Properties
-							.Where(args => !ShouldSkip(args.Metadata))
-							.Select(args => new ChangeReport<TEntity>(entity, ChangeType.Deleted, args.Metadata.Name) {
-								OldValue = args.OriginalValue,
-								NewValue = null,
-							}));
+				if (entry.State == EntityState.Modified || entry.State == EntityState.Deleted) {
+					var item = new CacheEvictionItem(entry.Metadata.ClrType, entry.Entity, entry.State);
+					if (ShouldEvict(item)) {
+						changes.Add(item);
 					}
 				}
 			}
@@ -50,9 +42,9 @@ namespace Albatross.EFCore.AutoCacheEviction {
 		public override async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default) {
 			if (this.changes.Count > 0) {
 				try {
-					await OnReportGenerated(this.changes);
+					await Evict(this.changes);
 				} catch (Exception err) {
-					logger.LogError(err, "Error occurred while generating change report");
+					logger.LogError(err, "Error occurred while evicting cache");
 				} finally {
 					this.changes.Clear();
 				}
