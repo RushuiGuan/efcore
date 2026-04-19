@@ -11,7 +11,7 @@ namespace Albatross.EFCore {
 	/// error condition. For non-key lookups (e.g. by name), a nullable return is more appropriate
 	/// since "not found" may be a valid outcome the caller handles.
 	/// </remarks>
-	public class NotFoundException : Exception{
+	public class NotFoundException : Exception {
 		// message look like "Resource (default, cooper) is not found"
 		public NotFoundException(string entity, params IEnumerable<string> keys) : base($"{entity} ({string.Join(", ", keys)}) is not found") { }
 		public NotFoundException(string entity, int id) : base($"{entity} ({id}) is not found") { }

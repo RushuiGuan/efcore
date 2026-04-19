@@ -15,12 +15,12 @@ namespace Albatross.EFCore.Admin {
 		}
 
 		static Regex goRegex = new Regex(@"^\s*go\s*$", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-		
+
 		async Task Execute(DbContext context, StringBuilder sb, CancellationToken cancellationToken) {
 			var text = sb.ToString().Trim();
 			if (!string.IsNullOrWhiteSpace(text)) {
 				logger.LogInformation("Executing: {query}", text);
-				await context.Database.ExecuteSqlRawAsync(text,cancellationToken);
+				await context.Database.ExecuteSqlRawAsync(text, cancellationToken);
 			}
 			sb.Length = 0;
 		}
@@ -39,7 +39,7 @@ namespace Albatross.EFCore.Admin {
 						sb.AppendLine(line);
 					}
 				}
-				await Execute(context, sb, cancellationToken); 
+				await Execute(context, sb, cancellationToken);
 			}
 		}
 	}

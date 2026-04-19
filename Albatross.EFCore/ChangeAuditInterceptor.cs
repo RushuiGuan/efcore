@@ -26,7 +26,7 @@ namespace Albatross.EFCore {
 	/// </code>
 	/// Requires <see cref="IGetCurrentActorId{T}"/> and <see cref="TimeProvider"/> in DI.
 	/// </remarks>
-	public class ChangeAuditInterceptor<TChangeEntity, TEntityId, TActorId> : SaveChangesInterceptor where TChangeEntity: Change<TEntityId, TActorId>, new() {
+	public class ChangeAuditInterceptor<TChangeEntity, TEntityId, TActorId> : SaveChangesInterceptor where TChangeEntity : Change<TEntityId, TActorId>, new() {
 		private readonly IGetCurrentActorId<TActorId> getCurrentActorId;
 		private readonly TimeProvider timeProvider;
 

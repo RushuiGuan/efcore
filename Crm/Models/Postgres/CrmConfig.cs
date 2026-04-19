@@ -8,6 +8,6 @@ namespace Crm.Models.Postgres {
 			this.ConnectionString = configuration.GetRequiredConnectionString("postgres")
 				.Interpolate(v => Environment.GetEnvironmentVariable(v) ?? throw new InvalidOperationException($"Environment variable ${v} is not found"));
 		}
-		public string ConnectionString { get;  }
+		public string ConnectionString { get; }
 	}
 }

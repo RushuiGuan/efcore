@@ -18,7 +18,7 @@ namespace Albatross.EFCore.Admin {
 				logger.LogInformation("Executing migration script: {name}", fileInfo.Name);
 				var reader = fileInfo.OpenText();
 				var script = await reader.ReadToEndAsync(cancellationToken);
-				if(!string.IsNullOrEmpty(script)) {
+				if (!string.IsNullOrEmpty(script)) {
 					await context.Database.ExecuteSqlRawAsync(script, cancellationToken);
 				}
 			}

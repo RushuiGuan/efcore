@@ -5,13 +5,13 @@ using Albatross.EFCore.Admin;
 using Albatross.EFCore.PostgreSQL;
 using Albatross.EFCore.SqlServer;
 using Albatross.Logging;
+using Crm.Models;
+using Crm.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Crm.Models;
 using Serilog;
 using System.CommandLine;
 using System.Threading.Tasks;
-using Crm.Services;
 
 namespace Crm.Admin {
 	internal class Program {

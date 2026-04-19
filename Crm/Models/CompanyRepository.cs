@@ -1,7 +1,7 @@
 using Albatross.EFCore;
 using Microsoft.EntityFrameworkCore;
-using SqlServerExt = Albatross.EFCore.SqlServer.Extensions;
 using PostgresExt = Albatross.EFCore.PostgreSQL.Extensions;
+using SqlServerExt = Albatross.EFCore.SqlServer.Extensions;
 
 namespace Crm.Models {
 	public interface ICompanyRepository : IRepository {
