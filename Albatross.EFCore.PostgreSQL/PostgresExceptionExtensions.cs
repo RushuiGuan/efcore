@@ -2,7 +2,7 @@ using Npgsql;
 using System;
 
 namespace Albatross.EFCore.PostgreSQL {
-	public static class ExceptionExtensions {
+	public static class PostgresExceptionExtensions {
 		// 23505: unique_violation
 		public static bool IsUniqueConstraintViolation(this Exception err) {
 			var pgEx = err as PostgresException ?? err.InnerException as PostgresException;

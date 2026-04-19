@@ -7,7 +7,7 @@ namespace Crm.Admin {
 		// need this constructor for the ef migration tool
 		public CrmSqlServerMigration() : this("any") { }
 		public CrmSqlServerMigration(string connectionString)
-			: base(Sql.Extensions.BuildMigrationOption<CrmDbSession>(Constants.Schema, connectionString)) {
+			: base(Sql.Extensions.BuildSqlServerMigrationDbContext<CrmDbSession>(Constants.Schema, connectionString)) {
 		}
 	}
 }

@@ -46,13 +46,13 @@ namespace Crm.Admin {
 				services.AddSingleton<IExecuteScriptFile, ExecuteSqlServerScriptFile>();
 				// this is only used by migration.  it has a diff DbContextOptions than the normal CrmDbSession
 				services.AddScoped(provider => new CrmSqlServerMigration(provider.GetRequiredService<ICrmConfig>().ConnectionString));
-				services.AddSqlServerWithContextPool<CrmDbSession>(provider => provider.GetRequiredService<ICrmConfig>().ConnectionString);
+				services.AddSqlServerWithContextPool<CrmDbSession>(provider => provider.GetRequiredService<ICrmConfig>().ConnectionString, true);
 			} else if (key.StartsWith("postgres")) {
 				services.AddConfig<ICrmConfig, Crm.Models.Postgres.CrmConfig>();
 				services.AddSingleton<IExecuteScriptFile, ExecuteScriptFile>();
 				// this is only used by migration.  it has a diff DbContextOptions than the normal CrmDbSession
 				services.AddScoped(provider => new CrmPostgresMigration(provider.GetRequiredService<ICrmConfig>().ConnectionString));
-				services.AddPostgresWithContextPool<CrmDbSession>(provider => provider.GetRequiredService<ICrmConfig>().ConnectionString);
+				services.AddPostgresWithContextPool<CrmDbSession>(provider => provider.GetRequiredService<ICrmConfig>().ConnectionString, true);
 			}
 			services.RegisterCommands();
 		}

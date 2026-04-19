@@ -11,7 +11,7 @@ namespace Crm.Models {
 			return services;
 		}
 		
-		public static DbContextOptionsBuilder AddAuditInterceptors(this DbContextOptionsBuilder optionsBuilder, IServiceProvider serviceProvider) {
+		public static DbContextOptionsBuilder AddCrmInterceptors(this DbContextOptionsBuilder optionsBuilder, IServiceProvider serviceProvider) {
 			optionsBuilder.AddInterceptors(serviceProvider.GetRequiredService<ChangeAuditInterceptor<Audit, Guid, Guid>>());
 			return optionsBuilder;
 		}
