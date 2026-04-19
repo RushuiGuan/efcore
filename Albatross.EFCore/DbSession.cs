@@ -30,7 +30,6 @@ namespace Albatross.EFCore {
 		#region constants
 		public const string Any = "any";
 		public const string EFMigrationHistory = "__EFMigrationsHistory";
-		protected readonly ILogger? logger;
 		#endregion
 
 		public DbContext DbContext => this;

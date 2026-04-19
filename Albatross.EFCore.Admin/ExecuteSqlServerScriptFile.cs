@@ -29,8 +29,8 @@ namespace Albatross.EFCore.Admin {
 			var file = new FileInfo(filename);
 			if (file.Exists) {
 				logger.LogInformation($"Executing migration file: {file}", file.Name);
-				var stream = file.OpenRead();
-				var reader = new StreamReader(stream);
+				using var stream = file.OpenRead();
+				using var reader = new StreamReader(stream);
 				var sb = new StringBuilder();
 				for (string? line = reader.ReadLine(); line != null; line = reader.ReadLine()) {
 					if (goRegex.IsMatch(line)) {

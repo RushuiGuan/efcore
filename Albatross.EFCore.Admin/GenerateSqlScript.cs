@@ -15,7 +15,7 @@ namespace Albatross.EFCore.Admin {
 		public FileInfo? OutputFile { get; init; }
 
 		[UseOption<OutputFileOption>(Description = "Drop table scripts", UseCustomName = true)]
-		public FileInfo? DropScript { get; set; }
+		public FileInfo? DropScript { get; init; }
 	}
 
 	public class GenerateSqlScript<T> : IAsyncCommandHandler where T : IDbSession {
