@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 	<PropertyGroup>
-		<Version>1.0.0</Version>
+		<Version>10.0.0</Version>
 		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
 		<LangVersion>Latest</LangVersion>
 		<Nullable>enable</Nullable>
@@ -11,7 +11,8 @@
 		<PackageIcon>icon.png</PackageIcon>
 		<Authors>Rushui Guan</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageTags>efcore;entity-framework;orm;sql-server;postgresql;dotnet;migrations;audit;repository</PackageTags>
+		<PackageTags>
+			efcore;entity-framework;orm;sql-server;postgresql;dotnet;migrations;audit;repository</PackageTags>
 		<PackageReleaseNotes>See https://rushuiguan.github.io/efcore/release-notes</PackageReleaseNotes>
 		<!-- SourceLink Configuration -->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
