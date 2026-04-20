@@ -27,6 +27,8 @@ namespace Albatross.EFCore {
 
 		/// <summary>True when the save failed due to a foreign-key constraint violation.</summary>
 		public bool ForeignKeyConflict { get; init; }
+		
+		public bool ConcurrencyConflict { get; init; }
 
 		/// <summary>
 		/// The exception that caused the save to fail — the inner exception if one exists, otherwise the

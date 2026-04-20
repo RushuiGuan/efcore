@@ -1,6 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Albatross.EFCore.SqlServer {
@@ -17,5 +15,6 @@ namespace Albatross.EFCore.SqlServer {
 			var sqlEx = err as SqlException ?? err.InnerException as SqlException;
 			return sqlEx?.Number is 547;
 		}
+
 	}
 }

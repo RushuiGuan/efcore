@@ -1,5 +1,6 @@
 ﻿using Albatross.CommandLine;
 using Albatross.CommandLine.Defaults;
+using Albatross.EFCore;
 using Albatross.Config;
 using Albatross.EFCore.Admin;
 using Albatross.EFCore.PostgreSQL;
@@ -10,6 +11,7 @@ using Crm.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 using System.CommandLine;
 using System.Threading.Tasks;
 
@@ -40,19 +42,20 @@ namespace Crm.Admin {
 		}
 		static void RegisterServices(ParseResult result, IServiceCollection services) {
 			services.AddCrmDbSession().AddCrm();
+			services.AddSingleton<IGetCurrentActorId<Guid>, SystemActorId>();
 			var key = result.CommandResult.Command.GetCommandKey();
 			if (key.StartsWith("sqlserver")) {
 				services.AddConfig<ICrmConfig, Crm.Models.SqlServer.CrmConfig>();
 				services.AddSingleton<IExecuteScriptFile, ExecuteSqlServerScriptFile>();
 				// this is only used by migration.  it has a diff DbContextOptions than the normal CrmDbSession
 				services.AddScoped(provider => new CrmSqlServerMigration(provider.GetRequiredService<ICrmConfig>().ConnectionString));
-				services.AddSqlServerWithContextPool<CrmDbSession>(provider => provider.GetRequiredService<ICrmConfig>().ConnectionString, true);
+				services.AddSqlServer<CrmDbSession>(provider => provider.GetRequiredService<ICrmConfig>().ConnectionString, true, (builder, sp) => builder.AddCrmInterceptors(sp));
 			} else if (key.StartsWith("postgres")) {
 				services.AddConfig<ICrmConfig, Crm.Models.Postgres.CrmConfig>();
 				services.AddSingleton<IExecuteScriptFile, ExecuteScriptFile>();
 				// this is only used by migration.  it has a diff DbContextOptions than the normal CrmDbSession
 				services.AddScoped(provider => new CrmPostgresMigration(provider.GetRequiredService<ICrmConfig>().ConnectionString));
-				services.AddPostgresWithContextPool<CrmDbSession>(provider => provider.GetRequiredService<ICrmConfig>().ConnectionString, true);
+				services.AddPostgres<CrmDbSession>(provider => provider.GetRequiredService<ICrmConfig>().ConnectionString, true, (builder, sp) => builder.AddCrmInterceptors(sp));
 			}
 			services.RegisterCommands();
 		}

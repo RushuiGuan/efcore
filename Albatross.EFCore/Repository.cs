@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -19,6 +20,7 @@ namespace Albatross.EFCore {
 		/// When true (typical for background jobs), any exception propagates directly.
 		/// </param>
 		Task<SaveResults> SaveChangesAsync(bool throwException, CancellationToken cancellationToken);
+
 		void Add<T>(params IEnumerable<T> entity) where T : class;
 		void Delete<T>(params IEnumerable<T> entity) where T : class;
 	}
@@ -42,6 +44,7 @@ namespace Albatross.EFCore {
 	/// </remarks>
 	public abstract class Repository<T> : IRepository where T : IDbSession {
 		protected readonly T session;
+
 		protected Repository(T session) {
 			this.session = session;
 		}
@@ -68,21 +71,27 @@ namespace Albatross.EFCore {
 				if (throwException) {
 					throw;
 				}
-				bool hasNameConflict = IsUniqueConstraintViolation(err);
-				bool hasForeignKeyConflict = false;
-				if (!hasNameConflict) {
-					hasForeignKeyConflict = IsForeignKeyConstraintViolation(err);
+				bool hasForeignKeyConflict = false, hasNameConflict = false;
+				var hasConcurrencyConflict = err is DbUpdateConcurrencyException || err.InnerException is DbUpdateConcurrencyException;
+				if (!hasConcurrencyConflict) {
+					hasNameConflict = IsUniqueConstraintViolation(err);
+					if (!hasNameConflict) {
+						hasForeignKeyConflict = IsForeignKeyConstraintViolation(err);
+					}
 				}
 				return new SaveResults {
 					Error = err.InnerException ?? err,
 					NameConflict = hasNameConflict,
 					ForeignKeyConflict = hasForeignKeyConflict,
+					ConcurrencyConflict = hasConcurrencyConflict,
 				};
 			}
 		}
+
 		public void Add<TEntity>(params IEnumerable<TEntity> entity) where TEntity : class {
 			this.session.DbContext.Set<TEntity>().AddRange(entity);
 		}
+
 		public void Delete<TEntity>(params IEnumerable<TEntity> entity) where TEntity : class {
 			this.session.DbContext.Set<TEntity>().RemoveRange(entity);
 		}
