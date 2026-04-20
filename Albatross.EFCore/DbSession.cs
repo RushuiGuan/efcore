@@ -33,6 +33,7 @@ namespace Albatross.EFCore {
 		#endregion
 
 		public DbContext DbContext => this;
+		public IDbConnection DbConnection => Database.GetDbConnection();
 		public virtual string NamespacePrefix => string.Empty;
 
 		public DbSession(DbContextOptions option) : base(option) { }
