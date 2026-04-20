@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 	<PropertyGroup>
-		<Version>10.0.0</Version>
+		<Version>1.0.0</Version>
 		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
 		<LangVersion>Latest</LangVersion>
 		<Nullable>enable</Nullable>
@@ -20,7 +20,7 @@
 		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.201">
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.202">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

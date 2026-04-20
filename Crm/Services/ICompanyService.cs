@@ -1,4 +1,5 @@
 using Crm.Models;
+using Crm.Repositories;
 using Crm.Requests;
 
 namespace Crm.Services {
@@ -8,9 +9,9 @@ namespace Crm.Services {
 	}
 
 	public class CompanyService : ICompanyService {
-		readonly ICompanyRepository repo;
+		readonly ICrmRepository repo;
 
-		public CompanyService(ICompanyRepository repo) {
+		public CompanyService(ICrmRepository repo) {
 			this.repo = repo;
 		}
 

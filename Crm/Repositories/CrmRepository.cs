@@ -1,17 +1,18 @@
 using Albatross.EFCore;
 using Albatross.EFCore.PostgreSQL;
 using Albatross.EFCore.SqlServer;
+using Crm.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Crm.Models {
-	public interface ICompanyRepository : IRepository {
+namespace Crm.Repositories {
+	public partial interface ICrmRepository : IRepository {
 		Task<List<Company>> GetAll(CancellationToken cancellationToken);
 		Task<Company?> GetById(Guid id, CancellationToken cancellationToken);
 		Task<Company?> GetByName(string name, CancellationToken cancellationToken);
 	}
 
-	public class CompanyRepository : Repository<ICrmDbSession>, ICompanyRepository {
-		public CompanyRepository(ICrmDbSession session) : base(session) { }
+	public class CrmRepository : Repository<ICrmDbSession>, ICrmRepository {
+		public CrmRepository(ICrmDbSession session) : base(session) { }
 
 		public override bool IsUniqueConstraintViolation(Exception err) =>
 			SqlServerExceptionExtensions.IsUniqueConstraintViolation(err) || PostgresExceptionExtensions.IsUniqueConstraintViolation(err);

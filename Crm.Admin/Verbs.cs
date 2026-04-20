@@ -10,3 +10,6 @@ using Crm.Admin;
 [assembly: Verb<ExecuteDeploymentScriptsParams, ExecuteDeploymentScripts<CrmSqlServerMigration>>("sqlserver exec-script", Description = "Execute sql server deployment scripts")]
 [assembly: Verb<GenerateSqlScriptParams, GenerateSqlScript<CrmSqlServerMigration>>("sqlserver create-script", Description = "Generate sql script for sql server")]
 [assembly: Verb<EFMigrationParams, EFMigrate<CrmSqlServerMigration>>("sqlserver ef-migrate", Description = "Migrate sql server database using dotnet ef tool")]
+
+[assembly: Verb<UpdateCompanyParams, UpdateCompanyHandler>("postgres update-company", Description = "Update a company in postgres")]
+[assembly: Verb<UpdateCompanyParams, UpdateCompanyHandler>("sqlserver update-company", Description = "Update a company in sql server")]

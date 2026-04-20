@@ -4,6 +4,7 @@ using Albatross.CommandLine.Inputs;
 using Albatross.Expression.Nodes;
 using Albatross.Text.CliFormat;
 using Crm.Models;
+using Crm.Repositories;
 using Crm.Requests;
 using Crm.Services;
 using System.CommandLine;
@@ -24,9 +25,9 @@ namespace Crm.Admin {
 	}
 	public class CreateCompany : BaseHandler<CreateCompanyParams> {
 		private readonly ICompanyService service;
-		private readonly ICompanyRepository repository;
+		private readonly ICrmRepository repository;
 
-		public CreateCompany(ICompanyService service, ICompanyRepository repository, ParseResult result, CreateCompanyParams parameters) : base(result, parameters) {
+		public CreateCompany(ICompanyService service, ICrmRepository repository, ParseResult result, CreateCompanyParams parameters) : base(result, parameters) {
 			this.service = service;
 			this.repository = repository;
 		}
