@@ -71,21 +71,25 @@ namespace Albatross.EFCore {
 				if (throwException) {
 					throw;
 				}
-				bool hasForeignKeyConflict = false, hasNameConflict = false;
-				var hasConcurrencyConflict = err is DbUpdateConcurrencyException || err.InnerException is DbUpdateConcurrencyException;
-				if (!hasConcurrencyConflict) {
-					hasNameConflict = IsUniqueConstraintViolation(err);
-					if (!hasNameConflict) {
-						hasForeignKeyConflict = IsForeignKeyConstraintViolation(err);
-					}
-				}
-				return new SaveResults {
-					Error = err.InnerException ?? err,
-					NameConflict = hasNameConflict,
-					ForeignKeyConflict = hasForeignKeyConflict,
-					ConcurrencyConflict = hasConcurrencyConflict,
-				};
+				return HandleException(err);
 			}
+		}
+
+		public SaveResults HandleException(Exception err) {
+			bool hasForeignKeyConflict = false, hasNameConflict = false;
+			var hasConcurrencyConflict = err is DbUpdateConcurrencyException || err.InnerException is DbUpdateConcurrencyException;
+			if (!hasConcurrencyConflict) {
+				hasNameConflict = IsUniqueConstraintViolation(err);
+				if (!hasNameConflict) {
+					hasForeignKeyConflict = IsForeignKeyConstraintViolation(err);
+				}
+			}
+			return new SaveResults {
+				Error = err.InnerException ?? err,
+				NameConflict = hasNameConflict,
+				ForeignKeyConflict = hasForeignKeyConflict,
+				ConcurrencyConflict = hasConcurrencyConflict,
+			};
 		}
 
 		public void Add<TEntity>(params IEnumerable<TEntity> entity) where TEntity : class {
