@@ -75,7 +75,7 @@ namespace Albatross.EFCore {
 			}
 		}
 
-		public SaveResults HandleException(Exception err) {
+		protected SaveResults HandleException(Exception err) {
 			bool hasForeignKeyConflict = false, hasNameConflict = false;
 			var hasConcurrencyConflict = err is DbUpdateConcurrencyException || err.InnerException is DbUpdateConcurrencyException;
 			if (!hasConcurrencyConflict) {
