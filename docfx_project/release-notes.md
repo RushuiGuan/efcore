@@ -55,6 +55,14 @@ Two extension methods on `Exception` have been added:
 - `IsUniqueConstraintViolation()` — detects `SqlState` `23505`
 - `IsForeignKeyConstraintViolation()` — detects `SqlState` `23503`
 
+#### Albatross.EFCore — RemoveEntity Extension
+
+A new `RemoveEntity<TEntity, TKey>` extension method on `List<TEntity>` has been added.
+
+- Removes a set of entities by key in a single pass
+- Throws `NotFoundException<TEntity>` if any key is not found, leaving the list unmodified
+- Accepts any `IEnumerable<TKey>` including one-time enumerables
+
 ---
 
 ## 8.1.2
