@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -23,6 +24,8 @@ namespace Albatross.EFCore {
 
 		void Add<T>(params IEnumerable<T> entity) where T : class;
 		void Delete<T>(params IEnumerable<T> entity) where T : class;
+		Task<T> GetRequired<T>(Guid id, CancellationToken cancellationToken) where T : class;
+		Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
 	}
 
 	/// <summary>
@@ -99,5 +102,12 @@ namespace Albatross.EFCore {
 		public void Delete<TEntity>(params IEnumerable<TEntity> entity) where TEntity : class {
 			this.session.DbContext.Set<TEntity>().RemoveRange(entity);
 		}
+
+		public async Task<TEntity> GetRequired<TEntity>(Guid id, CancellationToken cancellationToken) where TEntity : class {
+			return await this.session.DbContext.Set<TEntity>().FindAsync([id], cancellationToken) ?? throw new NotFoundException<TEntity>(id);
+		}
+
+		public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken) =>
+			session.DbContext.Database.BeginTransactionAsync(cancellationToken);
 	}
 }
