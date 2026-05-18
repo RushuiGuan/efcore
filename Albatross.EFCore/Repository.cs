@@ -24,7 +24,7 @@ namespace Albatross.EFCore {
 
 		void Add<T>(params IEnumerable<T> entity) where T : class;
 		void Delete<T>(params IEnumerable<T> entity) where T : class;
-		Task<T> GetRequired<T>(Guid id, CancellationToken cancellationToken) where T : class;
+		Task<T> GetRequired<T>(object id, CancellationToken cancellationToken) where T : class;
 		Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
 	}
 
@@ -103,8 +103,8 @@ namespace Albatross.EFCore {
 			this.session.DbContext.Set<TEntity>().RemoveRange(entity);
 		}
 
-		public async Task<TEntity> GetRequired<TEntity>(Guid id, CancellationToken cancellationToken) where TEntity : class {
-			return await this.session.DbContext.Set<TEntity>().FindAsync([id], cancellationToken) ?? throw new NotFoundException<TEntity>(id);
+		public async Task<TEntity> GetRequired<TEntity>(object id, CancellationToken cancellationToken) where TEntity : class {
+			return await this.session.DbContext.Set<TEntity>().FindAsync([id], cancellationToken) ?? throw new NotFoundException<TEntity>($"{id}");
 		}
 
 		public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken) =>
