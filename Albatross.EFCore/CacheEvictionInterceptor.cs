@@ -29,7 +29,7 @@ namespace Albatross.EFCore {
 		/// Required callback invoked after a successful save with all items that passed <see cref="ShouldEvict"/>.
 		/// Errors are caught and logged; cache failures do not roll back the save.
 		/// </summary>
-		public required Func<IEnumerable<string>, ValueTask> Evict { get; init; }
+		public required Func<IEnumerable<string>, CancellationToken, ValueTask> Evict { get; init; }
 
 		private readonly HashSet<string> cacheKeys = new();
 
@@ -37,7 +37,7 @@ namespace Albatross.EFCore {
 			this.cacheKeys.Clear();
 			foreach (var entry in context.ChangeTracker.Entries()) {
 				if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted) {
-					var item = new CacheEvictionItem(entry.Metadata.ClrType, entry.Entity, entry.State);
+					var item = new CacheEvictionItem(entry);
 					foreach (var key in GetCacheKeys(item)) {
 						cacheKeys.Add(key);
 					}
@@ -55,7 +55,7 @@ namespace Albatross.EFCore {
 		public override async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default) {
 			if (this.cacheKeys.Count > 0) {
 				try {
-					await Evict(this.cacheKeys);
+					await Evict(this.cacheKeys, cancellationToken);
 				} catch (Exception err) {
 					logger.LogError(err, "Error occurred while evicting cache");
 				} finally {
