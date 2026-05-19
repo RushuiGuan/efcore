@@ -23,7 +23,7 @@ namespace Albatross.EFCore {
 		/// Predicate that determines whether a changed entity's cache entry should be evicted.
 		/// Evaluated before the save completes so you can filter by entity type or state.
 		/// </summary>
-		public required Func<CacheEvictionItem, string?> GetCacheKey { get; init; }
+		public required Func<CacheEvictionItem, IEnumerable<string>> GetCacheKeys { get; init; }
 
 		/// <summary>
 		/// Required callback invoked after a successful save with all items that passed <see cref="ShouldEvict"/>.
@@ -38,8 +38,7 @@ namespace Albatross.EFCore {
 			foreach (var entry in context.ChangeTracker.Entries()) {
 				if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted) {
 					var item = new CacheEvictionItem(entry.Metadata.ClrType, entry.Entity, entry.State);
-					var key = GetCacheKey(item);
-					if (key != null) {
+					foreach (var key in GetCacheKeys(item)) {
 						cacheKeys.Add(key);
 					}
 				}
