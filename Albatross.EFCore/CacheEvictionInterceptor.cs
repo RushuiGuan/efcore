@@ -36,7 +36,7 @@ namespace Albatross.EFCore {
 		void CollectChanges(DbContext context) {
 			this.cacheKeys.Clear();
 			foreach (var entry in context.ChangeTracker.Entries()) {
-				if (entry.State == EntityState.Modified || entry.State == EntityState.Deleted) {
+				if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted) {
 					var item = new CacheEvictionItem(entry.Metadata.ClrType, entry.Entity, entry.State);
 					var key = GetCacheKey(item);
 					if (key != null) {
