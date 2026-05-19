@@ -23,22 +23,24 @@ namespace Albatross.EFCore {
 		/// Predicate that determines whether a changed entity's cache entry should be evicted.
 		/// Evaluated before the save completes so you can filter by entity type or state.
 		/// </summary>
-		public required Func<CacheEvictionItem, bool> ShouldEvict { get; init; }
+		public required Func<CacheEvictionItem, string?> GetCacheKey { get; init; }
 
 		/// <summary>
 		/// Required callback invoked after a successful save with all items that passed <see cref="ShouldEvict"/>.
 		/// Errors are caught and logged; cache failures do not roll back the save.
 		/// </summary>
-		public required Func<IEnumerable<CacheEvictionItem>, ValueTask> Evict { get; init; }
-		private readonly List<CacheEvictionItem> changes = new();
+		public required Func<IEnumerable<string>, ValueTask> Evict { get; init; }
+
+		private readonly HashSet<string> cacheKeys = new();
 
 		void CollectChanges(DbContext context) {
-			this.changes.Clear();
+			this.cacheKeys.Clear();
 			foreach (var entry in context.ChangeTracker.Entries()) {
 				if (entry.State == EntityState.Modified || entry.State == EntityState.Deleted) {
 					var item = new CacheEvictionItem(entry.Metadata.ClrType, entry.Entity, entry.State);
-					if (ShouldEvict(item)) {
-						changes.Add(item);
+					var key = GetCacheKey(item);
+					if (key != null) {
+						cacheKeys.Add(key);
 					}
 				}
 			}
@@ -52,20 +54,20 @@ namespace Albatross.EFCore {
 		}
 
 		public override async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default) {
-			if (this.changes.Count > 0) {
+			if (this.cacheKeys.Count > 0) {
 				try {
-					await Evict(this.changes);
+					await Evict(this.cacheKeys);
 				} catch (Exception err) {
 					logger.LogError(err, "Error occurred while evicting cache");
 				} finally {
-					this.changes.Clear();
+					this.cacheKeys.Clear();
 				}
 			}
 			return await base.SavedChangesAsync(eventData, result, cancellationToken);
 		}
 
 		public override Task SaveChangesFailedAsync(DbContextErrorEventData eventData, CancellationToken cancellationToken = default) {
-			this.changes.Clear();
+			this.cacheKeys.Clear();
 			return base.SaveChangesFailedAsync(eventData, cancellationToken);
 		}
 	}
