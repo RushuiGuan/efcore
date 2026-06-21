@@ -9,7 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Crm.Admin {
-	[Verb<UpdateCompanyHandler>("update-company", Description = "Update a company's name and description")]
+	[Verb<UpdateCompanyHandler>("postgres update-company", Description = "Update a company's name and description")]
+	[Verb<UpdateCompanyHandler>("sqlserver update-company", Description = "Update a company's name and description")]
 	public record class UpdateCompanyParams {
 		[Argument(Description = "Current name of the company to update")]
 		public required string Name { get; init; }
@@ -38,7 +39,7 @@ namespace Crm.Admin {
 				Description = parameters.Description,
 			};
 			var company = await companyService.UpdateCompany(parameters.Name, request, cancellationToken);
-			await crmRepository.SaveChangesAsync(true, cancellationToken);
+			await crmRepository.SaveChangesAsync(cancellationToken);
 			Writer.WriteLine($"Updated: {company.Name}");
 			return 0;
 		}

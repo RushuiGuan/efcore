@@ -70,7 +70,7 @@ public class CompanyService : ICompanyService {
 **Rules:**
 - Services **never depend on `IDbSession`** — only on repository interfaces.
 - Services **return entities**, not DTOs — transformation happens in the controller.
-- Services **never pre-check uniqueness** — let the database enforce it. `SaveResults.NameConflict` tells the caller if a unique constraint was violated.
+- Services **never pre-check uniqueness** — let the database enforce it. A `ConflictException` is thrown if a unique constraint is violated.
 
 ---
 
@@ -188,35 +188,29 @@ HTTP responses produced by `SaveAndReturn`:
 | Success with data | 200 OK |
 | Success with no data | 204 No Content |
 | `NotFoundException` thrown | 404 Not Found |
-| `NameConflict` (unique constraint) | 409 Conflict |
-| `ForeignKeyConflict` | 422 Unprocessable Entity |
+| `ConflictException` thrown | 409 Conflict |
+| `PreconditionFailedException` thrown | 412 Precondition Failed |
 | Other exception | 500 Internal Server Error |
 
 All error responses use RFC 7807 `ProblemDetails`.
 
 ### Manual approach
 
-For cases where `SaveAndReturn` does not fit, call `SaveChangesAsync` and use `HandleSaveResult` directly:
+For cases where `SaveAndReturn` does not fit, call `SaveChangesAsync` directly:
 
 ```csharp
 var company = await companyService.Create(Guid.NewGuid(), sanitized.Name, cancellationToken);
-var results = await companyRepository.SaveChangesAsync(throwException: false, cancellationToken);
-return results.HandleSaveResult(company.CreateDto());
-
-// For void actions:
-return results.HandleSaveResult();
+await companyRepository.SaveChangesAsync(cancellationToken);
+return company.CreateDto();
 ```
 
-`SaveResults` properties:
+Constraint violations are converted to semantic exceptions by `ISemanticExceptionConverter`:
 
-| Property | Meaning |
+| Exception | Meaning |
 |---|---|
-| `Success` | `true` if no exception occurred |
-| `NameConflict` | Unique constraint was violated |
-| `ForeignKeyConflict` | Foreign key constraint was violated |
-| `Error` | The underlying exception (non-null when `!Success`) |
-
-Pass `throwException: true` when you want exceptions to propagate directly — for example, in background jobs where HTTP mapping is not needed.
+| `ConflictException` | Unique constraint or FK violation on delete |
+| `NotFoundException` | FK violation on insert/update (referenced entity missing) |
+| `PreconditionFailedException` | Concurrency conflict |
 
 ---
 
@@ -224,7 +218,7 @@ Pass `throwException: true` when you want exceptions to propagate directly — f
 
 | Package | Purpose |
 |---|---|
-| `Albatross.EFCore` | `IRepository`, `SaveResults`, `NotFoundException`, `Repository<T>` |
+| `Albatross.EFCore` | `IRepository`, `NotFoundException`, `Repository<T>`, `EFCoreSemanticExceptionConverter` |
 | `Albatross.Hosting.EFCore` | `SaveAndReturn`, `HandleSaveResult` |
 | `Albatross.Input` | `IRequest<T>`, `Validate()` |
 | `Albatross.Hosting` | `HasProblem`, global exception handler |

@@ -38,18 +38,9 @@ namespace Crm.Admin {
 				Description = parameters.Description
 			};
 			var company = service.CreateNewCompany(request);
-			var saved = await repository.SaveChangesAsync(false, cancellationToken);
-			if (saved.Success) {
-				this.Writer.CliPrintWithExpression(company, parameters.Format);
-				return 0;
-			} else {
-				if (saved.NameConflict) {
-					result.InvocationConfiguration.Error.WriteLine("Company name already exists.");
-				} else {
-					result.InvocationConfiguration.Error.WriteLine("Failed to create company: " + saved.Error?.Message);
-				}
-				return 1;
-			}
+			await repository.SaveChangesAsync(cancellationToken);
+			this.Writer.CliPrintWithExpression(company, parameters.Format);
+			return 0;
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Crm.Admin.Migrations.Postgres
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("crm")
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -40,6 +40,7 @@ namespace Crm.Admin.Migrations.Postgres
                         .HasColumnName("contactid");
 
                     b.Property<string>("Line1")
+                        .IsRequired()
                         .HasMaxLength(512)
                         .IsUnicode(false)
                         .HasColumnType("character varying(512)")
@@ -70,49 +71,6 @@ namespace Crm.Admin.Migrations.Postgres
                         .HasDatabaseName("ix_address_contactid");
 
                     b.ToTable("address", "crm");
-                });
-
-            modelBuilder.Entity("Crm.Models.Audit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid>("ActorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("actorid");
-
-                    b.Property<int>("ChangeType")
-                        .HasColumnType("integer")
-                        .HasColumnName("changetype");
-
-                    b.Property<Guid>("EntityId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("entityid");
-
-                    b.Property<string>("EntityType")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .IsUnicode(false)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("entitytype");
-
-                    b.Property<string>("Json")
-                        .IsUnicode(false)
-                        .HasColumnType("text")
-                        .HasColumnName("json");
-
-                    b.Property<DateTime>("UtcTimeStamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("utctimestamp");
-
-                    b.HasKey("Id")
-                        .HasName("pk_audit");
-
-                    b.ToTable("audit", "crm");
                 });
 
             modelBuilder.Entity("Crm.Models.Company", b =>
@@ -174,7 +132,7 @@ namespace Crm.Admin.Migrations.Postgres
                     b.HasOne("Crm.Models.Contact", "Contact")
                         .WithMany("Addresses")
                         .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("fk_address_contact_contactid");
 
@@ -186,7 +144,7 @@ namespace Crm.Admin.Migrations.Postgres
                     b.HasOne("Crm.Models.Company", "Company")
                         .WithMany("Contacts")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_contact_company_companyid");
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Albatross.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -33,6 +34,7 @@ namespace Albatross.EFCore.SqlServer {
 					additionalConfig(builder, provider);
 				}
 			});
+			services.AddSingleton<ISemanticExceptionConverter, SqlServerSemanticExceptionConverter>();
 			return services;
 		}
 
@@ -50,6 +52,7 @@ namespace Albatross.EFCore.SqlServer {
 					additionalConfig(builder, provider);
 				}
 			});
+			services.AddSingleton<ISemanticExceptionConverter, SqlServerSemanticExceptionConverter>();
 			return services;
 		}
 	}

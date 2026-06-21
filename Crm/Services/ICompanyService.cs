@@ -26,7 +26,7 @@ namespace Crm.Services {
 		}
 
 		public async Task<Company> UpdateCompany(string name, UpdateCompanyRequest request, CancellationToken cancellationToken = default) {
-			var company = await repo.GetByName(name, cancellationToken)
+			var company = await repo.GetCompanyByName(name, cancellationToken)
 				?? throw new InvalidOperationException($"Company '{name}' not found");
 			if (request.NewName != null) {
 				company.Name = request.NewName;

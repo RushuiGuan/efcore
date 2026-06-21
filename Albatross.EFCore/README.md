@@ -5,7 +5,7 @@ A .NET library that wraps EF Core's `DbContext` in a clean session abstraction a
 ## Key Features
 - **Session Abstraction** - `IDbSession` / `DbSession` wraps `DbContext` as a disposable unit-of-work; repositories depend on it, services never do
 - **Entity Mapping Convention** - Co-locate entities with their `EntityMap<T>` class; the `Albatross.EFCore.CodeGen` source generator auto-registers all maps via `modelBuilder.BuildEntityModels()`
-- **Structured Save Results** - `Repository<T>.SaveChangesAsync` catches unique-key and foreign-key violations and returns typed `SaveResults` flags instead of raw exceptions
+- **Semantic Exception Conversion** - `Repository<T>.SaveChangesAsync` converts database constraint violations into semantic exceptions (`ConflictException`, `NotFoundException`, `PreconditionFailedException`) via `ISemanticExceptionConverter`
 - **Change Report Interceptor** - `ChangeReportInterceptor<TEntity>` captures per-property before/after snapshots and invokes a callback after each successful save
 - **Audit Trail Interceptor** - `ChangeAuditInterceptor<TChangeEntity, TEntityId, TActorId>` writes typed audit records for every `IAuditable<T>` entity that is modified or deleted
 - **Cache Eviction Interceptor** - `CacheEvictionInterceptor` triggers cache invalidation for modified or deleted entities post-save
@@ -45,13 +45,7 @@ public class CompanyEntityMap : EntityMap<Company> {
 
 // 3. Repository — one per aggregate root
 public class CompanyRepository : Repository<ICrmDbSession> {
-    public CompanyRepository(ICrmDbSession session) : base(session) { }
-
-    public override bool IsUniqueConstraintViolation(Exception err) =>
-        SqlServerExt.IsUniqueConstraintViolation(err);
-
-    public override bool IsForeignKeyConstraintViolation(Exception err) =>
-        SqlServerExt.IsForeignKeyConstraintViolation(err);
+    public CompanyRepository(ICrmDbSession session, ISemanticExceptionConverter converter) : base(session, converter) { }
 
     public async Task<Company> GetById(Guid id, CancellationToken ct) {
         var entity = await session.DbContext.Set<Company>()
@@ -62,11 +56,8 @@ public class CompanyRepository : Repository<ICrmDbSession> {
 }
 
 // 4. Save at the application boundary (controller / command handler)
-var result = await repository.SaveChangesAsync(throwException: false, cancellationToken);
-if (!result.Success) {
-    if (result.NameConflict) return Conflict("Name already exists");
-    throw result.Error!;
-}
+await repository.SaveChangesAsync(cancellationToken);
+// Constraint violations throw semantic exceptions (ConflictException, NotFoundException, PreconditionFailedException)
 ```
 
 ## Dependencies

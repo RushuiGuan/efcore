@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Albatross.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -35,6 +36,7 @@ namespace Albatross.EFCore.PostgreSQL {
 					additionalConfig(builder, provider);
 				}
 			});
+			services.AddSingleton<ISemanticExceptionConverter, PostgresSemanticExceptionConverter>();
 			return services;
 		}
 
@@ -46,6 +48,7 @@ namespace Albatross.EFCore.PostgreSQL {
 					additionalConfig(builder, provider);
 				}
 			});
+			services.AddSingleton<ISemanticExceptionConverter, PostgresSemanticExceptionConverter>();
 			return services;
 		}
 	}

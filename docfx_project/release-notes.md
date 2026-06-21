@@ -40,8 +40,8 @@ The `Albatross.Testing.EFCore` package has been removed.
 A new `IRepository` interface and `Repository<T>` abstract base class have been added.
 
 - `IRepository` exposes `Add<T>`, `Delete<T>`, and `SaveChangesAsync`
-- `SaveChangesAsync` returns a `SaveResults` record with `Success`, `NameConflict`, `ForeignKeyConflict`, and `Error` — no exception is thrown on constraint violations
-- `Repository<T>` requires subclasses to implement `IsUniqueConstraintViolation` and `IsForeignKeyConstraintViolation`
+- `SaveChangesAsync` converts constraint violations into semantic exceptions via `ISemanticExceptionConverter`
+- `Repository<T>` accepts an `ISemanticExceptionConverter` for database-specific exception translation
 
 #### Albatross.EFCore.SqlServer — Constraint Violation Helpers
 

@@ -1,4 +1,5 @@
 using Albatross.EFCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
 
@@ -20,7 +21,7 @@ namespace Crm.Models {
 			base.Map(builder);
 			builder.HasKey(x => x.Id);
 			builder.Property(x => x.Id).ValueGeneratedNever();
-			builder.HasMany(x => x.Addresses).WithOne(x => x.Contact).HasForeignKey(x => x.ContactId);
+			builder.HasMany(x => x.Addresses).WithOne(x => x.Contact).HasForeignKey(x => x.ContactId).OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

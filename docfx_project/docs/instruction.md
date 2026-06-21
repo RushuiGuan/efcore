@@ -102,13 +102,7 @@ public interface ICompanyRepository : IRepository {
 }
 
 public class CompanyRepository : Repository<ICrmDbSession>, ICompanyRepository {
-    public CompanyRepository(ICrmDbSession session) : base(session) { }
-
-    public override bool IsUniqueConstraintViolation(Exception err) =>
-        SqlServerExt.IsUniqueConstraintViolation(err) || PostgresExt.IsUniqueConstraintViolation(err);
-
-    public override bool IsForeignKeyConstraintViolation(Exception err) =>
-        SqlServerExt.IsForeignKeyConstraintViolation(err) || PostgresExt.IsForeignKeyConstraintViolation(err);
+    public CompanyRepository(ICrmDbSession session, ISemanticExceptionConverter converter) : base(session, converter) { }
 
     public Task<List<Company>> GetAll(CancellationToken cancellationToken) =>
         session.DbContext.Set<Company>().ToListAsync(cancellationToken);
@@ -131,17 +125,6 @@ public class CompanyRepository : Repository<ICrmDbSession>, ICompanyRepository {
 - Always **eager load** related data with `.Include()` / `.ThenInclude()`. Never enable lazy loading.
 - **By-key lookups** (`GetById`, `GetByKey`): throw `NotFoundException<T>` when not found — never return `null`.
 - **Non-key lookups** (e.g. `GetByName`): nullable return (`T?`) is acceptable.
-
-### Constraint violation detection
-
-SQL Server and PostgreSQL detection live in their respective packages. Alias them for clarity:
-
-```csharp
-using SqlServerExt = Albatross.EFCore.SqlServer.Extensions;
-using PostgresExt = Albatross.EFCore.PostgreSQL.Extensions;
-```
-
-If the project targets only one provider, implement only that provider's extension method.
 
 ### NotFoundException
 
@@ -192,7 +175,7 @@ public class CompanyService : ICompanyService {
 **Rules:**
 - Services **never depend on `IDbSession`** — only on repository interfaces.
 - Services **return entities**, not DTOs.
-- Services **never pre-check uniqueness** — let the database enforce it via unique constraints. `SaveResults` reports `NameConflict` if violated.
+- Services **never pre-check uniqueness** — let the database enforce it via unique constraints. A `ConflictException` is thrown if violated.
 
 ---
 
@@ -284,4 +267,4 @@ See the **alba-cli** documentation for wiring verbs and bootstrapping `Program.c
 2. Create a **repository interface + class** — by-key lookups throw `NotFoundException<T>`.
 3. Create a **service interface + class** — business logic only, no `SaveChangesAsync`.
 4. Register everything in the **DI extension method**.
-5. The **controller or command handler** calls `SaveChangesAsync` once and handles `SaveResults`.
+5. The **controller or command handler** calls `SaveChangesAsync` once. Constraint violations are converted to semantic exceptions by `ISemanticExceptionConverter`.

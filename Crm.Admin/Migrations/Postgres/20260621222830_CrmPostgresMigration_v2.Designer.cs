@@ -3,17 +3,17 @@ using System;
 using Crm.Admin;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Crm.Admin.Migrations.SqlServer
+namespace Crm.Admin.Migrations.Postgres
 {
-    [DbContext(typeof(CrmSqlServerMigration))]
-    [Migration("20260330153350_CrmSqlServerMigration_v1")]
-    partial class CrmSqlServerMigration_v1
+    [DbContext(typeof(CrmPostgresMigration))]
+    [Migration("20260621222830_CrmPostgresMigration_v2")]
+    partial class CrmPostgresMigration_v2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,93 +21,113 @@ namespace Crm.Admin.Migrations.SqlServer
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("crm")
-                .HasAnnotation("ProductVersion", "10.0.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Crm.Models.Address", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("City")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("city");
 
                     b.Property<Guid>("ContactId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("contactid");
 
                     b.Property<string>("Line1")
+                        .IsRequired()
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("line1");
 
                     b.Property<string>("Line2")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("line2");
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("postalcode");
 
                     b.Property<string>("State")
                         .HasMaxLength(512)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(512)");
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("state");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_address");
 
-                    b.HasIndex("ContactId");
+                    b.HasIndex("ContactId")
+                        .HasDatabaseName("ix_address_contactid");
 
-                    b.ToTable("Address", "crm");
+                    b.ToTable("address", "crm");
                 });
 
             modelBuilder.Entity("Crm.Models.Company", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_company");
 
                     b.HasIndex("Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_company_name");
 
-                    b.ToTable("Company", "crm");
+                    b.ToTable("company", "crm");
                 });
 
             modelBuilder.Entity("Crm.Models.Contact", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("companyid");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_contact");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyId")
+                        .HasDatabaseName("ix_contact_companyid");
 
-                    b.ToTable("Contact", "crm");
+                    b.ToTable("contact", "crm");
                 });
 
             modelBuilder.Entity("Crm.Models.Address", b =>
@@ -115,8 +135,9 @@ namespace Crm.Admin.Migrations.SqlServer
                     b.HasOne("Crm.Models.Contact", "Contact")
                         .WithMany("Addresses")
                         .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_address_contact_contactid");
 
                     b.Navigation("Contact");
                 });
@@ -126,8 +147,9 @@ namespace Crm.Admin.Migrations.SqlServer
                     b.HasOne("Crm.Models.Company", "Company")
                         .WithMany("Contacts")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_contact_company_companyid");
 
                     b.Navigation("Company");
                 });

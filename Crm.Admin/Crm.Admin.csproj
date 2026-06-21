@@ -7,16 +7,17 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Albatross.Authentication" Version="8.1.0" />
-		<PackageReference Include="Albatross.CommandLine" Version="8.0.10" />
-		<PackageReference Include="Albatross.CommandLine.Defaults" Version="8.0.8" />
+		<PackageReference Include="Albatross.CommandLine" Version="8.0.14" />
+		<PackageReference Include="Albatross.CommandLine.Defaults" Version="8.0.14" />
 		<PackageReference Include="Albatross.Reflection" Version="8.0.7" />
 		<PackageReference Include="Albatross.Text.CliFormat" Version="9.0.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.5">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.9" />
+		<PackageReference Include="Spectre.Console" Version="0.57.0" />
 		<ProjectReference Include="..\Albatross.EFCore.Admin\Albatross.EFCore.Admin.csproj" />
 		<ProjectReference Include="..\Crm\Crm.csproj" />
 	</ItemGroup>

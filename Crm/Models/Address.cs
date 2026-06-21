@@ -10,7 +10,7 @@ namespace Crm.Models {
 		public Contact Contact { get; set; } = null!;
 
 		[MaxLength(Constants.TitleLength)]
-		public string? Line1 { get; set; }
+		public required string Line1 { get; set; }
 
 		[MaxLength(Constants.TitleLength)]
 		public string? Line2 { get; set; }

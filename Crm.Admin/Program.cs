@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.CommandLine;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Crm.Admin {
@@ -43,6 +44,7 @@ namespace Crm.Admin {
 		static void RegisterServices(ParseResult result, IServiceCollection services) {
 			services.AddCrmDbSession().AddCrm();
 			services.AddSingleton<IGetCurrentActorId<Guid>, SystemActorId>();
+			services.AddScoped<ICommandErrorHandler, CrmCommandErrorHandler>();
 			var key = result.CommandResult.Command.GetCommandKey();
 			if (key.StartsWith("sqlserver")) {
 				services.AddConfig<ICrmConfig, Crm.Models.SqlServer.CrmConfig>();
