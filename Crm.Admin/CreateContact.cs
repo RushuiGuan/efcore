@@ -12,9 +12,9 @@ namespace Crm.Admin {
 	[Verb<CreateContact>("postgres create-contact")]
 	[Verb<CreateContact>("sqlserver create-contact")]
 	public class CreateContactParams {
-		[Option]
-		public required string Company { get; init; }
-		[Option]
+		[Argument]
+		public required Guid CompanyId { get; init; }
+		[Argument]
 		public required string Name { get; init; }
 	}
 	public class CreateContact : BaseHandler<CreateContactParams> {
@@ -23,11 +23,9 @@ namespace Crm.Admin {
 			this.repository = repository;
 		}
 		public override async Task<int> InvokeAsync(CancellationToken cancellationToken) {
-			var company = await this.repository.GetCompanyByName(parameters.Company, cancellationToken)
-				?? throw new NotFoundException<Company>(parameters.Company);
 			var contact = new Contact {
 				Id = Guid.NewGuid(),
-				CompanyId = company.Id,
+				CompanyId = parameters.CompanyId,
 				Name = parameters.Name,
 			};
 			repository.Add(contact);

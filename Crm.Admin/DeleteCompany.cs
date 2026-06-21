@@ -15,7 +15,7 @@ namespace Crm.Admin {
 	[Verb<DeleteCompany>("postgres delete-company")]
 	[Verb<DeleteCompany>("sqlserver delete-company")]
 	public class DeleteCompanyParams {
-		[Option]
+		[Argument]
 		public required string Name { get; init; }
 	}
 	public class DeleteCompany : BaseHandler<DeleteCompanyParams> {
