@@ -14,15 +14,15 @@ namespace Albatross.EFCore.SqlServer {
 			var sqlEx = source as SqlException ?? source.InnerException as SqlException;
 			if (sqlEx != null) {
 				if (sqlEx.Number is 2601 or 2627) {
-					result = new ConflictException(sqlEx.Message);
+					result = new ConflictException(sqlEx.Message, source);
 					return true;
 				}
 				if (sqlEx.Number is 547) {
 					if (source is DbUpdateException dbEx
 						&& dbEx.Entries.Any(e => e.State == EntityState.Deleted)) {
-						result = new ConflictException(sqlEx.Message);
+						result = new ConflictException(sqlEx.Message, source);
 					} else {
-						result = new NotFoundException(sqlEx.Message);
+						result = new NotFoundException(sqlEx.Message, source);
 					}
 					return true;
 				}

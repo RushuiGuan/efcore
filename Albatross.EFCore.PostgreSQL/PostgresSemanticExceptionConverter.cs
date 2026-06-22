@@ -14,20 +14,20 @@ namespace Albatross.EFCore.PostgreSQL {
 			var pgEx = source as PostgresException ?? source.InnerException as PostgresException;
 			if (pgEx != null) {
 				if (pgEx.SqlState == "23505") {
-					result = new ConflictException(pgEx.Message);
+					result = new ConflictException(pgEx.Message, source);
 					return true;
 				}
 				if (pgEx.SqlState == "23503") {
 					if (source is DbUpdateException dbEx
 						&& dbEx.Entries.Any(e => e.State == EntityState.Deleted)) {
-						result = new ConflictException(pgEx.Message);
+						result = new ConflictException(pgEx.Message, source);
 					} else {
-						result = new NotFoundException(pgEx.Message);
+						result = new NotFoundException(pgEx.Message, source);
 					}
 					return true;
 				}
 				if (pgEx.SqlState == "23001") {
-					result = new ConflictException(pgEx.Message);
+					result = new ConflictException(pgEx.Message, source);
 					return true;
 				}
 			}

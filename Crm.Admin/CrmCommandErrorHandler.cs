@@ -14,9 +14,6 @@ namespace Crm.Admin {
 		}
 		public int? Handle(Exception exception) {
 			logger.LogError(exception, $"error executing command {context.Key}");
-			while (exception.InnerException != null) {
-				exception = exception.InnerException;
-			}
 			AnsiConsole.MarkupLineInterpolated($"[bold red]{exception.GetType().Name} :[/] {exception.Message}");
 			return 1;
 		}

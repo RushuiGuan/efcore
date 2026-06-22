@@ -7,7 +7,7 @@ namespace Albatross.EFCore {
 	public class EFCoreSemanticExceptionConverter : ISemanticExceptionConverter{
 		public virtual bool TryConvert(Exception source, [NotNullWhen(true)] out Exception? result) {
 			if (source is DbUpdateConcurrencyException concurrencyEx) {
-				result = new PreconditionFailedException(concurrencyEx.Message);
+				result = new PreconditionFailedException(concurrencyEx.Message, source);
 				return true;
 			}
 			result = null;
