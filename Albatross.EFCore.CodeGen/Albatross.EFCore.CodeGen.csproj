@@ -36,10 +36,10 @@
 		<GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <NoWarn>1701;1702;5128</NoWarn>
+		<NoWarn>1701;1702;NU5128</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <NoWarn>1701;1702;5128</NoWarn>
+		<NoWarn>1701;1702;NU5128</NoWarn>
 	</PropertyGroup>
 	<Target Name="GetDependencyTargetPaths">
 		<ItemGroup>
