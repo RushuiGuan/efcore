@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Authentication" Version="8.1.1-57.main" />
+		<PackageReference Include="Albatross.Authentication" Version="8.1.1" />
 		<PackageReference Include="Albatross.CommandLine" Version="8.0.14" />
 		<PackageReference Include="Albatross.CommandLine.Defaults" Version="8.0.14" />
 		<PackageReference Include="Albatross.Reflection" Version="8.0.7" />
