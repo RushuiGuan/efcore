@@ -1,8 +1,8 @@
 using Albatross.Exceptions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +12,8 @@ namespace Albatross.EFCore {
 
 		void Add<T>(params IEnumerable<T> entity) where T : class;
 		void Delete<T>(params IEnumerable<T> entity) where T : class;
-		Task<T> GetRequired<T>(object[] keys, CancellationToken cancellationToken) where T : class;
+		ValueTask<T> GetRequired<T>(object[] keys, CancellationToken cancellationToken) where T : class;
+		ValueTask<T?> Get<T>(object[] keys, CancellationToken cancellationToken) where T : class;
 		Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
 	}
 
@@ -45,9 +46,11 @@ namespace Albatross.EFCore {
 			this.session.DbContext.Set<TEntity>().RemoveRange(entity);
 		}
 
-		public async Task<TEntity> GetRequired<TEntity>(object[] keys, CancellationToken cancellationToken) where TEntity : class {
-			return await this.session.DbContext.Set<TEntity>().FindAsync(keys, cancellationToken) ?? throw new NotFoundException<TEntity>($"{keys}");
+		public async ValueTask<TEntity> GetRequired<TEntity>(object[] keys, CancellationToken cancellationToken) where TEntity : class {
+			return await this.Get<TEntity>(keys, cancellationToken) ?? throw new NotFoundException<TEntity>(keys.Select(x => Convert.ToString(x) ?? string.Empty));
 		}
+		public ValueTask<TEntity?> Get<TEntity>(object[] keys, CancellationToken cancellationToken) where TEntity : class
+			=> this.session.DbContext.Set<TEntity>().FindAsync(keys, cancellationToken);
 
 		public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken) =>
 			session.DbContext.Database.BeginTransactionAsync(cancellationToken);
