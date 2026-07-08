@@ -9,6 +9,7 @@
 		<PackageTags>Analyzer;Roslyn</PackageTags>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<DevelopmentDependency>true</DevelopmentDependency>
+		<IncludeSymbols>false</IncludeSymbols>
 	</PropertyGroup>
 	<!--When packing codegen, its dependencies should be included as part of the package-->
 	<ItemGroup>
