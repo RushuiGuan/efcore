@@ -25,4 +25,30 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
+	<!-- Reference the generator as an analyzer (build-time only): builds it before this project and
+	     keeps its assembly/deps out of this project's compile & runtime references. -->
+	<ItemGroup>
+		<ProjectReference Include="..\Albatross.EFCore.CodeGen\Albatross.EFCore.CodeGen.csproj">
+			<PrivateAssets>all</PrivateAssets>
+			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+			<OutputItemType>Analyzer</OutputItemType>
+		</ProjectReference>
+	</ItemGroup>
+	<!-- Bundle the generator payload into this package's analyzers/dotnet/cs so that referencing
+	     Albatross.EFCore auto-activates the source generator for consumers - no separate
+	     Albatross.EFCore.CodeGen reference needed. BundleCodeGenPayloadOnly=true resolves the $(Pkg*)
+	     paths without pulling the deps into this project's compile (which would re-trigger the net10
+	     CS0433 polyfill collision) or its runtime dependencies. -->
+	<PropertyGroup>
+		<BundleCodeGenPayloadOnly>true</BundleCodeGenPayloadOnly>
+	</PropertyGroup>
+	<Import Project="..\Albatross.EFCore.CodeGen\CodeGen.Payload.targets" />
+	<ItemGroup>
+	  <PackageReference Update="Albatross.CodeGen" Version="9.0.6-rc.241">
+	    <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Update="Albatross.CodeGen.CSharp" Version="9.0.6-rc.241">
+	    <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
 </Project>

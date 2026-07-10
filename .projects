@@ -1,7 +1,5 @@
 # packages
-Albatross.EFCore.CodeGen
 Albatross.EFCore
-
 Albatross.EFCore.PostgreSQL
 Albatross.EFCore.SqlServer
 Albatross.EFCore.Admin

@@ -1,9 +1,6 @@
 ﻿using Albatross.CommandLine;
 using Albatross.CommandLine.Annotations;
-using Albatross.CommandLine.Inputs;
-using Albatross.Expression.Nodes;
-using Albatross.Text.CliFormat;
-using Crm.Models;
+using Albatross.CommandLine.Outputs;
 using Crm.Repositories;
 using Crm.Requests;
 using Crm.Services;
@@ -19,9 +16,6 @@ namespace Crm.Admin {
 		public required string Name { get; init; }
 		[Option]
 		public required string? Description { get; init; }
-
-		[UseOption<FormatExpressionOption>]
-		public IExpression? Format { get; init; }
 	}
 	public class CreateCompany : BaseHandler<CreateCompanyParams> {
 		private readonly ICompanyService service;
@@ -39,7 +33,7 @@ namespace Crm.Admin {
 			};
 			var company = service.CreateNewCompany(request);
 			await repository.SaveChangesAsync(cancellationToken);
-			this.Writer.CliPrintWithExpression(company, parameters.Format);
+			company.Print(null, false);
 			return 0;
 		}
 	}

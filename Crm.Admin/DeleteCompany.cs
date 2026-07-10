@@ -1,12 +1,6 @@
 ﻿using Albatross.CommandLine;
 using Albatross.CommandLine.Annotations;
-using Albatross.CommandLine.Inputs;
-using Albatross.Expression.Nodes;
-using Albatross.Text.CliFormat;
-using Crm.Models;
 using Crm.Repositories;
-using Crm.Requests;
-using Crm.Services;
 using System.CommandLine;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +21,9 @@ namespace Crm.Admin {
 
 		public override async Task<int> InvokeAsync(CancellationToken cancellationToken) {
 			var company = await repository.GetCompanyByName(parameters.Name, cancellationToken);
-			this.repository.Delete(company);
+			if (company != null) {
+				this.repository.Delete(company);
+			}
 			await this.repository.SaveChangesAsync(cancellationToken);
 			return 0;
 		}
