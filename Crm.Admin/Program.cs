@@ -33,7 +33,7 @@ namespace Crm.Admin {
 		static void RegisterServices(ParseResult result, IServiceCollection services) {
 			services.AddCrmDbSession().AddCrm();
 			services.AddSingleton<IGetCurrentActorId<Guid>, SystemActorId>();
-			services.AddScoped<ICommandErrorHandler, CrmCommandErrorHandler>();
+			services.AddScoped<ICommandErrorHandler, Albatross.CommandLine.Outputs.GlobalErrorHandler>();
 			var key = result.CommandResult.Command.GetCommandKey();
 			if (key.StartsWith("sqlserver")) {
 				services.AddConfig<ICrmConfig, Crm.Models.SqlServer.CrmConfig>();
