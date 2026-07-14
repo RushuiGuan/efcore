@@ -15,6 +15,23 @@ namespace Albatross.EFCore {
 		ValueTask<T> GetRequired<T>(object[] keys, CancellationToken cancellationToken) where T : class;
 		ValueTask<T?> Get<T>(object[] keys, CancellationToken cancellationToken) where T : class;
 		Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
+		/// <summary>
+		/// Flushes pending changes and then commits the transaction, in that order. Commit only finalizes the
+		/// database transaction — it does NOT flush the EF Core change tracker — so any change-tracker
+		/// mutations made since the last save (added/modified/deleted entities) would be silently dropped if
+		/// the transaction were committed without saving first. This method removes that footgun by pairing
+		/// the two calls: after it returns, everything staged in the change tracker is guaranteed to be part
+		/// of the committed transaction.
+		/// </summary>
+		/// <remarks>
+		/// Prefer this over calling <see cref="SaveChangesAsync"/> and <see cref="IDbContextTransaction.CommitAsync"/>
+		/// separately at the end of a unit of work. Note that operations executing their own SQL immediately
+		/// (e.g. <c>ExecuteDeleteAsync</c>/<c>ExecuteUpdateAsync</c>) bypass the change tracker and are already
+		/// applied within the transaction; the save here still runs so any tracked mutations alongside them are
+		/// not lost.
+		/// </remarks>
+		/// <param name="transaction">The active transaction to commit, typically from <see cref="BeginTransactionAsync"/>.</param>
+		/// <param name="cancellationToken">A token to cancel the save/commit.</param>
 		Task SaveAndCommitAsync(IDbContextTransaction transaction, CancellationToken cancellationToken);
 	}
 
@@ -56,7 +73,10 @@ namespace Albatross.EFCore {
 		public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken) =>
 			session.DbContext.Database.BeginTransactionAsync(cancellationToken);
 
+		/// <inheritdoc />
 		public async Task SaveAndCommitAsync(IDbContextTransaction transaction, CancellationToken cancellationToken) {
+			// Save before commit: CommitAsync finalizes the transaction but does not flush the change tracker,
+			// so committing without saving first would silently drop any tracked (added/modified/deleted) entities.
 			await this.SaveChangesAsync(cancellationToken);
 			await transaction.CommitAsync(cancellationToken);
 		}
