@@ -15,6 +15,7 @@ namespace Albatross.EFCore {
 		ValueTask<T> GetRequired<T>(object[] keys, CancellationToken cancellationToken) where T : class;
 		ValueTask<T?> Get<T>(object[] keys, CancellationToken cancellationToken) where T : class;
 		Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
+		Task SaveAndCommitAsync(IDbContextTransaction transaction, CancellationToken cancellationToken);
 	}
 
 	public abstract class Repository<T> : IRepository where T : IDbSession {
@@ -54,5 +55,10 @@ namespace Albatross.EFCore {
 
 		public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken) =>
 			session.DbContext.Database.BeginTransactionAsync(cancellationToken);
+
+		public async Task SaveAndCommitAsync(IDbContextTransaction transaction, CancellationToken cancellationToken) {
+			await this.SaveChangesAsync(cancellationToken);
+			await transaction.CommitAsync(cancellationToken);
+		}
 	}
 }
