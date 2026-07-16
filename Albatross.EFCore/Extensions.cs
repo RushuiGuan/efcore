@@ -87,27 +87,5 @@ namespace Albatross.EFCore {
 			builder.HasConversion(value => value, item => item.HasValue ? DateTime.SpecifyKind(item.Value, DateTimeKind.Utc) : null);
 			return builder;
 		}
-
-		public static IReadOnlyList<TEntity> RemoveEntity<TEntity, TKey>(this List<TEntity> list, IEnumerable<TKey> keys, Func<TEntity, TKey> getKey) where TKey : notnull {
-			var dict = keys.ToDictionary<TKey, TKey, int>(x => x, _ => -1);
-			if (list.Count == 0 || dict.Count == 0) { return []; }
-			var removed = new List<TEntity>();
-			for (int i = 0; i < list.Count; i++) {
-				var item = list[i];
-				var key = getKey(item);
-				if (dict.ContainsKey(key)) {
-					dict[key] = i;
-					removed.Add(item);
-				}
-			}
-			var sorted = dict.OrderByDescending(x => x.Value).ToArray();
-			if (sorted[^1].Value == -1) {
-				throw new NotFoundException<TEntity>($"{sorted[^1].Key}");
-			}
-			foreach (var item in sorted) {
-				list.RemoveAt(item.Value);
-			}
-			return removed;
-		}
 	}
 }
