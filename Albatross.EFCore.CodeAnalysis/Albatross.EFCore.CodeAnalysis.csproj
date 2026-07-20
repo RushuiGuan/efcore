@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>Latest</LangVersion>
+		<Nullable>Enable</Nullable>
+		<Description>A companion code analyzer used by the Albatross.EFCore library</Description>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<PackageTags>Analyzer;Roslyn</PackageTags>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<DevelopmentDependency>true</DevelopmentDependency>
+		<IncludeSymbols>false</IncludeSymbols>
+		<!-- All dependencies are bundled under analyzers/dotnet/cs; the package declares no runtime
+		     dependencies, so suppress the (empty) dependencies group that otherwise triggers NU5128. -->
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- Roslyn is provided by the host compiler; never packed into the analyzer payload. -->
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="[4.10.0]" GeneratePathProperty="true" PrivateAssets="all" />
+	</ItemGroup>
+	<!-- Analyzer payload (dependency path-refs + the None pack items). Shared with
+	     Albatross.EFCore.csproj so the Albatross.EFCore package bundles the identical generator payload.
+	     Here BundleCodeGenPayloadOnly is unset, so this project compiles against the deps as usual. -->
+	<Import Project="CodeAnalysis.Payload.targets" />
+	<!-- begin: this setup is used for project reference only.  It would be removed when packing -->
+	<PropertyGroup>
+		<GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+	</PropertyGroup>
+	<Target Name="GetDependencyTargetPaths">
+		<ItemGroup>
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGAlbatross_CodeAnalysis)\lib\netstandard2.0\Albatross.CodeAnalysis.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGAlbatross_CodeAnalysis_Polyfill)\lib\netstandard2.0\Albatross.CodeAnalysis.Polyfill.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGAlbatross_Collections)\lib\netstandard2.0\Albatross.Collections.dll" IncludeRuntimeDependency="false" />
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGAlbatross_Text)\lib\netstandard2.0\Albatross.Text.dll" IncludeRuntimeDependency="false" />
+		</ItemGroup>
+	</Target>
+	<ItemGroup>
+		<None Remove="bin\Debug\netstandard2.0\\Albatross.EFCore.CodeAnalysis.dll" />
+	</ItemGroup>
+	<!-- end -->
+	<ItemGroup>
+		<None Include="..\icon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+</Project>

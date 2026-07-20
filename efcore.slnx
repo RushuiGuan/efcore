@@ -11,6 +11,7 @@
     <File Path="README.md" />
   </Folder>
   <Project Path="Albatross.EFCore.Admin/Albatross.EFCore.Admin.csproj" />
+  <Project Path="Albatross.EFCore.CodeAnalysis/Albatross.EFCore.CodeAnalysis.csproj" Id="dbd43a4d-626a-46a7-a30b-2bf03e6741aa" />
   <Project Path="Albatross.EFCore.CodeGen/Albatross.EFCore.CodeGen.csproj" />
   <Project Path="Albatross.EFCore.PostgreSQL/Albatross.EFCore.PostgreSQL.csproj" />
   <Project Path="Albatross.EFCore.SqlServer/Albatross.EFCore.SqlServer.csproj" />
@@ -18,4 +19,5 @@
   <Project Path="Albatross.EFCore/Albatross.EFCore.csproj" />
   <Project Path="Crm.Admin\Crm.Admin.csproj" />
   <Project Path="Crm/Crm.csproj" />
+  <Project Path="Test.CodeAnalysis/Test.CodeAnalysis.csproj" Id="22d37ec2-40dd-49c4-90b3-fa82c7c4ec61" />
 </Solution>

@@ -3,6 +3,7 @@ Albatross.EFCore
 Albatross.EFCore.PostgreSQL
 Albatross.EFCore.SqlServer
 Albatross.EFCore.Admin
+Albatross.EFCore.CodeAnalysis
 
 # tests
 
