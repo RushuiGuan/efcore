@@ -14,6 +14,10 @@ namespace Crm.Models {
 		public required string Name { get; set; }
 
 		public ICollection<Address> Addresses { get; init; } = [];
+
+		public IReadOnlyCollection<string> MaskedProperties => Array.Empty<string>();
+		public IReadOnlyCollection<string> IgnoredProperties => Array.Empty<string>();
+
 	}
 
 	public class ContactEntityMap : EntityMap<Contact> {

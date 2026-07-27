@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Albatross.EFCore {
 	/// <summary>
 	/// Marks an entity as eligible for change auditing by
@@ -6,5 +9,7 @@ namespace Albatross.EFCore {
 	/// </summary>
 	public interface IAuditable<out TEntityId> {
 		TEntityId Id { get; }
+		IReadOnlyCollection<string> MaskedProperties => Array.Empty<string>();
+		IReadOnlyCollection<string> IgnoredProperties => Array.Empty<string>();
 	}
 }

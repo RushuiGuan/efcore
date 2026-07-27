@@ -11,6 +11,8 @@ namespace Crm.Models {
 		public string? Description { get; set; }
 
 		public List<Contact> Contacts { get; init; } = [];
+		public IReadOnlyCollection<string> IgnoredProperties { get; } = Array.Empty<string>();
+		public IReadOnlyCollection<string> MaskedProperties { get; } = Array.Empty<string>();
 	}
 
 	public class CompanyEntityMap : EntityMap<Company> {

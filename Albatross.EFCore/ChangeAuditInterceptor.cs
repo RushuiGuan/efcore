@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,21 +42,32 @@ namespace Albatross.EFCore {
 			public object? Current { get; init; }
 		}
 
-		string? GetJson(EntityEntry entry) {
+		const string MaskedText = "***";
+		string? GetJson(EntityEntry entry, IAuditable<TEntityId> auditable) {
 			var dict = new Dictionary<string, ChangedProperty>();
+			var masked = auditable.MaskedProperties;
+			var ignored = auditable.IgnoredProperties;
 			foreach (var property in entry.Properties) {
-				if (property.Metadata.IsConcurrencyToken) {
+				if (property.Metadata.IsConcurrencyToken || ignored.Contains(property.Metadata.Name)) {
 					continue;
 				}
 				if (entry.State == EntityState.Deleted) {
+					var value = masked.Contains(property.Metadata.Name) ? MaskedText : property.OriginalValue;
 					dict[property.Metadata.Name] = new ChangedProperty {
-						Original = property.OriginalValue,
+						Original = value,
 					};
 				} else if (entry.State == EntityState.Modified) {
 					if (property.IsModified) {
+						object? original, current;
+						if (masked.Contains(property.Metadata.Name)) {
+							original = current = MaskedText;
+						} else {
+							original = property.OriginalValue;
+							current = property.CurrentValue;
+						}
 						dict[property.Metadata.Name] = new ChangedProperty {
-							Original = property.OriginalValue,
-							Current = property.CurrentValue,
+							Original = original,
+							Current = current,
 						};
 					}
 				}
@@ -88,7 +100,7 @@ namespace Albatross.EFCore {
 						default:
 							continue;
 					}
-					var json = GetJson(entry);
+					var json = GetJson(entry, auditable);
 					if (json != null) {
 						changes.Add(new TChangeEntity() {
 							EntityId = auditable.Id,
