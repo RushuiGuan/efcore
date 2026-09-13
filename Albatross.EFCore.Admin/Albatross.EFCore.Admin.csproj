@@ -3,12 +3,16 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<!-- The Albatross.CommandLine packages this project depends on have no stable 9.x release yet.
+		     Suppress NU5104 so a stable Albatross.EFCore.Admin can still be packed. Remove this once
+		     Albatross.CommandLine 9.0.0 ships. -->
+		<NoWarn>$(NoWarn);NU5104</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
         <PackageReference Include="Albatross.SemVer" Version="2.0.5" />
-		<PackageReference Include="Albatross.CommandLine.Inputs" Version="9.0.0-rc.286" />
-		<PackageReference Include="Albatross.CommandLine" Version="9.0.0-rc.286" />
-		<PackageReference Include="Albatross.CommandLine.Outputs" Version="9.0.0-rc.286" />
+		<PackageReference Include="Albatross.CommandLine.Inputs" Version="9.0.0-rc.284" />
+		<PackageReference Include="Albatross.CommandLine" Version="9.0.0-rc.284" />
+		<PackageReference Include="Albatross.CommandLine.Outputs" Version="9.0.0-rc.284" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
 			<PrivateAssets>all</PrivateAssets>
