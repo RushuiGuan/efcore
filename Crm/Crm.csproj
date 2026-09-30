@@ -6,9 +6,8 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.Config" Version="8.0.1" />
+		<PackageReference Include="Albatross.Config" Version="8.0.2" />
 		<PackageReference Include="Albatross.Text" Version="9.0.3" />
-		<PackageReference Include="Albatross.Text.Table" Version="9.0.3" />
 		<ProjectReference Include="..\Albatross.EFCore.PostgreSQL\Albatross.EFCore.PostgreSQL.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore.SqlServer\Albatross.EFCore.SqlServer.csproj" />
 		<ProjectReference Include="..\Albatross.EFCore\Albatross.EFCore.csproj" />
