@@ -251,12 +251,13 @@ public class CrmPostgresMigration : CrmDbSession {
 
 The parameterless constructor is required by `dotnet ef` at design time.
 
-The Admin library provides three built-in command handlers:
+The Admin library provides four built-in command handlers:
 
 | Handler | Purpose |
 |---|---|
 | `EFMigrate<T>` | Apply pending EF migrations |
 | `GenerateSqlScript<T>` | Print or write the CREATE script for the schema |
+| `GenerateUnwindScript<T>` | Print or write a script that reverts all migrations |
 | `ExecuteDeploymentScripts<T>` | Execute versioned `.sql` files from a directory |
 
 See the **alba-cli** documentation for wiring verbs and bootstrapping `Program.cs`.

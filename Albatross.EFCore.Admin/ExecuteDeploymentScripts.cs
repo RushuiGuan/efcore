@@ -1,8 +1,10 @@
 ﻿using Albatross.CommandLine;
 using Albatross.CommandLine.Annotations;
 using Albatross.CommandLine.Inputs;
+using Albatross.CommandLine.Outputs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.IO;
 using System.Linq;
@@ -46,18 +48,19 @@ namespace Albatross.EFCore.Admin {
 
 		public override async Task<int> InvokeAsync(CancellationToken cancellationToken) {
 			if (parameters.PreMigration && !this.session.DbContext.Database.HasPendingModelChanges()) {
-				await this.Writer.WriteLineAsync("Skip pre-migration script since there is no pending model changes");
+				result.PrintSuccess("Skip pre-migration script since there is no pending model changes");
 				return 0;
 			} else {
 				var directory = FindTargetVersionScriptLocation(parameters.Directory.FullName);
-				await this.Writer.WriteLineAsync($"Using deployment folder: {directory}");
 				var info = new DirectoryInfo(directory);
+				var files = new List<string>();
 				if (info.Exists) {
 					foreach (var file in info.GetFiles("*.sql", SearchOption.TopDirectoryOnly).OrderBy(x => x.Name)) {
-						await this.Writer.WriteLineAsync(file.Name);
 						await this.executeScriptFile.ExecuteAsync(this.session.DbContext, file.FullName, cancellationToken);
+						files.Add(file.Name);
 					}
 				}
+				result.PrintSuccess($"Executed {files.Count} deployment script(s)");
 				return 0;
 			}
 		}

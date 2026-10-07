@@ -19,6 +19,8 @@ The library contains the following generic utilities:
 	  however will skip execution if the target database has no pending migrations.
 2. [EFMigrate](./EFMigrate.cs) - A command that will execute the efcore migration
 3. [GenerateSqlScript](./GenerateSqlScript.cs) - A command that will generate the sql script for a specific db context.
+4. [GenerateUnwindScript](./GenerateUnwindScript.cs) - A command that will generate the sql script to revert all migrations of a specific db context, from the latest migration back to an empty database.
+	* `--idempotent` generates a script that checks the migration history before reverting each migration.
 
 # Putting it all together
 
